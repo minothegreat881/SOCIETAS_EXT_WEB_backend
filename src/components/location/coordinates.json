@@ -1,0 +1,22 @@
+{
+  "collectionName": "components_location_coordinates",
+  "info": {
+    "displayName": "Coordinates",
+    "description": "GPS coordinates for event location",
+    "icon": "map-pin"
+  },
+  "options": {},
+  "attributes": {
+    "latitude": {
+      "type": "float",
+      "required": true
+    },
+    "longitude": {
+      "type": "float", 
+      "required": true
+    },
+    "accuracy": {
+      "type": "float"
+    }
+  }
+}

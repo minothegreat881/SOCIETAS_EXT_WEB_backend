@@ -1,0 +1,19 @@
+{
+  "kind": "singleType",
+  "collectionName": "custom_uploads",
+  "info": {
+    "singularName": "custom-upload",
+    "pluralName": "custom-uploads",
+    "displayName": "Custom Upload",
+    "description": "Custom upload without auto-rotation"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string"
+    }
+  }
+}

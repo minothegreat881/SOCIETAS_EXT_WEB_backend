@@ -1,0 +1,95 @@
+{
+  "kind": "collectionType",
+  "collectionName": "gallery_photos",
+  "info": {
+    "singularName": "gallery-photo",
+    "pluralName": "gallery-photos",
+    "displayName": "Gallery Photo",
+    "description": "Photo gallery with preserved orientation and EXIF data"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true,
+      "maxLength": 255
+    },
+    "alt": {
+      "type": "string",
+      "required": true,
+      "maxLength": 255
+    },
+    "description": {
+      "type": "text"
+    },
+    "location": {
+      "type": "string",
+      "maxLength": 255
+    },
+    "activity": {
+      "type": "string",
+      "maxLength": 255
+    },
+    "category": {
+      "type": "enumeration",
+      "enum": [
+        "Equipment",
+        "Training", 
+        "Military",
+        "Reenactments",
+        "Festivals",
+        "Culture",
+        "Camps"
+      ],
+      "default": "Equipment",
+      "required": true
+    },
+    "photo": {
+      "type": "media",
+      "multiple": false,
+      "required": true,
+      "allowedTypes": ["images"],
+      "pluginOptions": {
+        "i18n": {
+          "localized": false
+        }
+      }
+    },
+    "featured": {
+      "type": "boolean",
+      "default": false
+    },
+    "sortOrder": {
+      "type": "integer",
+      "default": 0
+    },
+    "originalWidth": {
+      "type": "integer"
+    },
+    "originalHeight": {
+      "type": "integer"
+    },
+    "aspectRatio": {
+      "type": "enumeration",
+      "enum": [
+        "portrait",
+        "landscape", 
+        "square"
+      ]
+    },
+    "exifData": {
+      "type": "json",
+      "description": "Preserved EXIF metadata"
+    },
+    "photographDate": {
+      "type": "date"
+    },
+    "photographer": {
+      "type": "string",
+      "maxLength": 255
+    }
+  }
+}

@@ -1,0 +1,68 @@
+{
+  "kind": "collectionType",
+  "collectionName": "events",
+  "info": {
+    "singularName": "event",
+    "pluralName": "events",
+    "displayName": "Event",
+    "description": "Roman reenactment events and activities"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true,
+      "maxLength": 255
+    },
+    "description": {
+      "type": "richtext",
+      "required": true
+    },
+    "eventDate": {
+      "type": "datetime",
+      "required": true
+    },
+    "endDate": {
+      "type": "datetime"
+    },
+    "location": {
+      "type": "string",
+      "required": true
+    },
+    "coordinates": {
+      "type": "component",
+      "repeatable": false,
+      "component": "location.coordinates"
+    },
+    "category": {
+      "type": "enumeration",
+      "enum": [
+        "Festival",
+        "Battle Reenactment", 
+        "Workshop",
+        "Training",
+        "Exhibition",
+        "Competition",
+        "Social Event"
+      ],
+      "required": true
+    },
+    "featured": {
+      "type": "boolean",
+      "default": false
+    },
+    "coverImage": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": ["images"]
+    },
+    "sortOrder": {
+      "type": "integer",
+      "default": 0
+    }
+  }
+}

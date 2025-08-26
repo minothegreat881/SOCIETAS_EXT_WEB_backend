@@ -514,7 +514,7 @@ export interface ApiGalleryPhotoGalleryPhoto
     singularName: 'gallery-photo';
   };
   options: {
-    draftAndPublish: true;
+    draftAndPublish: false;
   };
   attributes: {
     activity: Schema.Attribute.String &

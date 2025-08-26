@@ -8,7 +8,7 @@
     "description": "Photo gallery with preserved orientation and EXIF data"
   },
   "options": {
-    "draftAndPublish": true
+    "draftAndPublish": false
   },
   "pluginOptions": {},
   "attributes": {

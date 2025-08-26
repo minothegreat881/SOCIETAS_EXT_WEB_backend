@@ -17,7 +17,7 @@ export default {
    * run jobs, or perform some special logic.
    */
   async bootstrap({ strapi }) {
-    console.log('🚀 Bootstrap: Setting up Activities API permissions');
+    console.log('🚀 Bootstrap: Setting up API permissions');
     
     // Find both public and authenticated roles
     const publicRole = await strapi
@@ -48,6 +48,15 @@ export default {
       'plugin::upload.content-api.findOne'
     ];
 
+    // Create permissions for gallery-photos (FULL CRUD operations)
+    const galleryPhotoActions = [
+      'api::gallery-photo.gallery-photo.find',
+      'api::gallery-photo.gallery-photo.findOne',
+      'api::gallery-photo.gallery-photo.create',
+      'api::gallery-photo.gallery-photo.update',
+      'api::gallery-photo.gallery-photo.delete',
+    ];
+
     // Setup permissions for both public and authenticated roles
     for (const role of [publicRole, authenticatedRole]) {
       // Get current permissions for the role
@@ -59,7 +68,7 @@ export default {
           },
         });
 
-      // Check if activities permissions already exist
+      // Setup Activities permissions
       const activityPermissions = currentPermissions.filter(
         (permission) => 
           activityActions.includes(permission.action)
@@ -86,6 +95,35 @@ export default {
         console.log(`✅ Activities API permissions created for ${role.type} role`);
       } else {
         console.log(`✅ Activities API permissions already exist for ${role.type} role`);
+      }
+
+      // Setup Gallery Photos permissions
+      const galleryPermissions = currentPermissions.filter(
+        (permission) => 
+          galleryPhotoActions.includes(permission.action)
+      );
+
+      if (galleryPermissions.length < galleryPhotoActions.length) {
+        console.log(`⚙️ Creating Gallery Photos API permissions for ${role.type} role`);
+        
+        for (const action of galleryPhotoActions) {
+          const exists = currentPermissions.some(p => p.action === action);
+          if (!exists) {
+            await strapi.query('plugin::users-permissions.permission').create({
+              data: {
+                action,
+                subject: null,
+                properties: {},
+                conditions: [],
+                role: role.id,
+              },
+            });
+          }
+        }
+
+        console.log(`✅ Gallery Photos API permissions created for ${role.type} role`);
+      } else {
+        console.log(`✅ Gallery Photos API permissions already exist for ${role.type} role`);
       }
     }
   },

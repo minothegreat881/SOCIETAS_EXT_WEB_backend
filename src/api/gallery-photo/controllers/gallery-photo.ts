@@ -130,6 +130,43 @@ export default factories.createCoreController('api::gallery-photo.gallery-photo'
     return result;
   },
 
+  // DELETE /gallery-photos/:id
+  async delete(ctx) {
+    console.log('🗑️ Deleting gallery photo:', ctx.params.id);
+    
+    try {
+      // KRITICKÉ: V Strapi 5 potrebujeme zmazať pomocou documentId
+      const photoId = ctx.params.id;
+      
+      // Najprv nájdi záznam pomocou ID aby sme získali documentId
+      const existingPhoto = await strapi.query('api::gallery-photo.gallery-photo').findOne({
+        where: { id: photoId }
+      });
+      
+      if (!existingPhoto) {
+        console.log('❌ Gallery photo not found:', photoId);
+        ctx.notFound('Gallery photo not found');
+        return;
+      }
+      
+      console.log('🎯 Found photo with documentId:', existingPhoto.documentId);
+      
+      // Zmaž pomocou documentId
+      const result = await strapi.query('api::gallery-photo.gallery-photo').delete({
+        where: { documentId: existingPhoto.documentId }
+      });
+      
+      console.log('✅ Gallery photo deleted successfully:', result);
+      
+      // Vráť správnu odpoveď
+      ctx.body = result;
+      return result;
+    } catch (error) {
+      console.error('❌ Error deleting gallery photo:', error);
+      throw error;
+    }
+  },
+
   // Helper function na odznačenie všetkých ostatných featured fotiek
   async unfeaturedAllOthers(excludeId = null) {
     try {

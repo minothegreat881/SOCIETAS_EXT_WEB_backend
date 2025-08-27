@@ -467,32 +467,27 @@ export interface ApiEventEvent extends Struct.CollectionTypeSchema {
   };
   attributes: {
     category: Schema.Attribute.Enumeration<
-      [
-        'Festival',
-        'Battle Reenactment',
-        'Workshop',
-        'Training',
-        'Exhibition',
-        'Competition',
-        'Social Event',
-      ]
+      ['reenactment', 'training', 'exhibition', 'workshop', 'meeting']
     > &
-      Schema.Attribute.Required;
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'reenactment'>;
     coordinates: Schema.Attribute.Component<'location.coordinates', false>;
-    coverImage: Schema.Attribute.Media<'images'>;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
-    description: Schema.Attribute.RichText & Schema.Attribute.Required;
-    endDate: Schema.Attribute.DateTime;
-    eventDate: Schema.Attribute.DateTime & Schema.Attribute.Required;
+    description: Schema.Attribute.Text & Schema.Attribute.Required;
+    endDate: Schema.Attribute.DateTime & Schema.Attribute.Required;
     featured: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<'oneToMany', 'api::event.event'> &
       Schema.Attribute.Private;
-    location: Schema.Attribute.String & Schema.Attribute.Required;
+    locationAddress: Schema.Attribute.String & Schema.Attribute.Required;
+    locationName: Schema.Attribute.String & Schema.Attribute.Required;
+    photo: Schema.Attribute.Media<'images'>;
     publishedAt: Schema.Attribute.DateTime;
+    recurring: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
     sortOrder: Schema.Attribute.Integer & Schema.Attribute.DefaultTo<0>;
+    startDate: Schema.Attribute.DateTime & Schema.Attribute.Required;
     title: Schema.Attribute.String &
       Schema.Attribute.Required &
       Schema.Attribute.SetMinMaxLength<{

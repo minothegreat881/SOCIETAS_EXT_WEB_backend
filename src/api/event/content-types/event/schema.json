@@ -18,17 +18,22 @@
       "maxLength": 255
     },
     "description": {
-      "type": "richtext",
+      "type": "text",
       "required": true
     },
-    "eventDate": {
+    "startDate": {
       "type": "datetime",
       "required": true
     },
     "endDate": {
-      "type": "datetime"
+      "type": "datetime",
+      "required": true
     },
-    "location": {
+    "locationName": {
+      "type": "string",
+      "required": true
+    },
+    "locationAddress": {
       "type": "string",
       "required": true
     },
@@ -40,29 +45,34 @@
     "category": {
       "type": "enumeration",
       "enum": [
-        "Festival",
-        "Battle Reenactment", 
-        "Workshop",
-        "Training",
-        "Exhibition",
-        "Competition",
-        "Social Event"
+        "reenactment",
+        "training", 
+        "exhibition",
+        "workshop",
+        "meeting"
       ],
-      "required": true
+      "required": true,
+      "default": "reenactment"
+    },
+    "recurring": {
+      "type": "boolean",
+      "default": false
     },
     "featured": {
       "type": "boolean",
       "default": false
     },
-    "coverImage": {
-      "type": "media",
-      "multiple": false,
-      "required": false,
-      "allowedTypes": ["images"]
-    },
     "sortOrder": {
       "type": "integer",
       "default": 0
+    },
+    "photo": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": [
+        "images"
+      ]
     }
   }
 }

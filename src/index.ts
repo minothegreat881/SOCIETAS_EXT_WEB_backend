@@ -57,6 +57,15 @@ export default {
       'api::gallery-photo.gallery-photo.delete',
     ];
 
+    // Create permissions for events (FULL CRUD operations)
+    const eventActions = [
+      'api::event.event.find',
+      'api::event.event.findOne',
+      'api::event.event.create',
+      'api::event.event.update',
+      'api::event.event.delete',
+    ];
+
     // Setup permissions for both public and authenticated roles
     for (const role of [publicRole, authenticatedRole]) {
       // Get current permissions for the role
@@ -124,6 +133,35 @@ export default {
         console.log(`✅ Gallery Photos API permissions created for ${role.type} role`);
       } else {
         console.log(`✅ Gallery Photos API permissions already exist for ${role.type} role`);
+      }
+
+      // Setup Events permissions
+      const eventPermissions = currentPermissions.filter(
+        (permission) => 
+          eventActions.includes(permission.action)
+      );
+
+      if (eventPermissions.length < eventActions.length) {
+        console.log(`⚙️ Creating Events API permissions for ${role.type} role`);
+        
+        for (const action of eventActions) {
+          const exists = currentPermissions.some(p => p.action === action);
+          if (!exists) {
+            await strapi.query('plugin::users-permissions.permission').create({
+              data: {
+                action,
+                subject: null,
+                properties: {},
+                conditions: [],
+                role: role.id,
+              },
+            });
+          }
+        }
+
+        console.log(`✅ Events API permissions created for ${role.type} role`);
+      } else {
+        console.log(`✅ Events API permissions already exist for ${role.type} role`);
       }
     }
   },

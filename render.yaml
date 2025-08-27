@@ -28,12 +28,12 @@ services:
         value: 0.0.0.0
       - key: PORT
         value: 10000
-      - key: CLOUDINARY_NAME
-        value: # Will be set manually
-      - key: CLOUDINARY_KEY
-        value: # Will be set manually
-      - key: CLOUDINARY_SECRET
-        value: # Will be set manually
+      - key: CLOUDINARY_CLOUD_NAME
+        value: dii0wl9ke
+      - key: CLOUDINARY_API_KEY
+        value: 521365131889896
+      - key: CLOUDINARY_API_SECRET
+        value: bN5oAFXzoC-k-R31Z4Gxhd7Rngw
 
 databases:
   - name: societas-db

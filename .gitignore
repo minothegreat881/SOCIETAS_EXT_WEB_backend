@@ -1,0 +1,33 @@
+# Dependencies
+node_modules/
+
+# Strapi
+.env
+.env.local
+.env.production
+.tmp/
+.cache/
+build/
+dist/
+*.db*
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# PM2
+ecosystem.config.js.backup
+
+# SSL certificates
+*.pem
+*.key
+*.crt

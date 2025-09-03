@@ -8,8 +8,8 @@ import { Context, Next } from 'koa';
 export default () => {
   return async (ctx: Context, next: Next) => {
     
-    // KRITICKÉ: Zachytiť upload requesty PRED spracovaním
-    if (ctx.path === '/api/upload' && ctx.method === 'POST') {
+    // KRITICKÉ: Zachytiť upload requesty PRED spracovaním (vrátane raw-upload)
+    if ((ctx.path === '/api/upload' || ctx.path === '/api/raw-upload') && ctx.method === 'POST') {
       console.log('🚫 INTERCEPTING UPLOAD: Preventing ALL auto-rotation');
       
       // KRITICKÉ: Nastaviť globálne flagy pre vypnutie image processing
@@ -54,7 +54,7 @@ export default () => {
     }
     
     // Log výsledku
-    if (ctx.path === '/api/upload' && ctx.response.body) {
+    if ((ctx.path === '/api/upload' || ctx.path === '/api/raw-upload') && ctx.response.body) {
       console.log('📤 Upload completed with rotation prevention');
       
       if (Array.isArray(ctx.response.body)) {

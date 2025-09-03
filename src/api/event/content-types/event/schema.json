@@ -36,7 +36,7 @@
     },
     "locationAddress": {
       "type": "text",
-      "required": true
+      "required": false
     },
     "coordinates": {
       "type": "json",

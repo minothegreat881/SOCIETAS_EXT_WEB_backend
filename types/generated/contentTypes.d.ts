@@ -376,7 +376,7 @@ export interface AdminUser extends Struct.CollectionTypeSchema {
 export interface ApiActivityActivity extends Struct.CollectionTypeSchema {
   collectionName: 'activities';
   info: {
-    description: 'SCEAR training activities and club meetings for member recruitment';
+    description: 'SCEAR training activities and club meetings';
     displayName: 'Activity';
     pluralName: 'activities';
     singularName: 'activity';
@@ -394,21 +394,8 @@ export interface ApiActivityActivity extends Struct.CollectionTypeSchema {
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
-    currentParticipants: Schema.Attribute.Integer &
-      Schema.Attribute.SetMinMax<
-        {
-          min: 0;
-        },
-        number
-      > &
-      Schema.Attribute.DefaultTo<0>;
     description: Schema.Attribute.RichText & Schema.Attribute.Required;
-    difficulty: Schema.Attribute.Enumeration<
-      ['beginner', 'intermediate', 'advanced']
-    > &
-      Schema.Attribute.DefaultTo<'beginner'>;
     endDate: Schema.Attribute.DateTime & Schema.Attribute.Required;
-    featured: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
     image: Schema.Attribute.Media<'images'>;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
@@ -416,24 +403,13 @@ export interface ApiActivityActivity extends Struct.CollectionTypeSchema {
       'api::activity.activity'
     > &
       Schema.Attribute.Private;
-    locationAddress: Schema.Attribute.Text & Schema.Attribute.Required;
+    locationAddress: Schema.Attribute.Text;
     locationName: Schema.Attribute.String &
       Schema.Attribute.Required &
       Schema.Attribute.SetMinMaxLength<{
         maxLength: 200;
       }>;
-    maxParticipants: Schema.Attribute.Integer &
-      Schema.Attribute.SetMinMax<
-        {
-          min: 1;
-        },
-        number
-      > &
-      Schema.Attribute.DefaultTo<20>;
     publishedAt: Schema.Attribute.DateTime;
-    recurring: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
-    requiresExperience: Schema.Attribute.Boolean &
-      Schema.Attribute.DefaultTo<false>;
     startDate: Schema.Attribute.DateTime & Schema.Attribute.Required;
     title: Schema.Attribute.String &
       Schema.Attribute.Required &
@@ -443,7 +419,6 @@ export interface ApiActivityActivity extends Struct.CollectionTypeSchema {
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
-    visible: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
   };
 }
 
@@ -483,7 +458,7 @@ export interface ApiEventEvent extends Struct.CollectionTypeSchema {
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<'oneToMany', 'api::event.event'> &
       Schema.Attribute.Private;
-    locationAddress: Schema.Attribute.Text & Schema.Attribute.Required;
+    locationAddress: Schema.Attribute.Text;
     locationName: Schema.Attribute.String &
       Schema.Attribute.Required &
       Schema.Attribute.SetMinMaxLength<{
@@ -567,6 +542,76 @@ export interface ApiGalleryItemGalleryItem extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiGalleryPhotoGalleryPhoto
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'gallery_photos';
+  info: {
+    description: 'Photos for the gallery section';
+    displayName: 'Gallery Photo';
+    pluralName: 'gallery-photos';
+    singularName: 'gallery-photo';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    activity: Schema.Attribute.String &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 200;
+      }>;
+    alt: Schema.Attribute.String &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 255;
+      }>;
+    category: Schema.Attribute.Enumeration<
+      [
+        'Equipment',
+        'Training',
+        'Military',
+        'Reenactments',
+        'Festivals',
+        'Culture',
+        'Camps',
+      ]
+    > &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'Training'>;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    description: Schema.Attribute.Text;
+    featured: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::gallery-photo.gallery-photo'
+    > &
+      Schema.Attribute.Private;
+    location: Schema.Attribute.String &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 200;
+      }>;
+    photo: Schema.Attribute.Media<'images'> & Schema.Attribute.Required;
+    publishedAt: Schema.Attribute.DateTime;
+    sortOrder: Schema.Attribute.Integer &
+      Schema.Attribute.SetMinMax<
+        {
+          min: 0;
+        },
+        number
+      > &
+      Schema.Attribute.DefaultTo<0>;
+    title: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 255;
+      }>;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface ApiHistoryArticleHistoryArticle
   extends Struct.CollectionTypeSchema {
   collectionName: 'history_articles';
@@ -580,6 +625,11 @@ export interface ApiHistoryArticleHistoryArticle
     draftAndPublish: true;
   };
   attributes: {
+    articleType: Schema.Attribute.Enumeration<
+      ['standard', 'auxiliary-forces', 'legion-timeline']
+    > &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'standard'>;
     author: Schema.Attribute.String &
       Schema.Attribute.Required &
       Schema.Attribute.SetMinMaxLength<{
@@ -594,6 +644,7 @@ export interface ApiHistoryArticleHistoryArticle
         'history',
         'archaeology',
         'sources',
+        'legion-history',
       ]
     > &
       Schema.Attribute.Required &
@@ -608,12 +659,20 @@ export interface ApiHistoryArticleHistoryArticle
         maxLength: 500;
       }>;
     featured: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
+    heroImage: Schema.Attribute.Media<'images'>;
+    images: Schema.Attribute.Component<'article.image', true>;
+    intro: Schema.Attribute.Text &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 2000;
+      }>;
+    keyFacts: Schema.Attribute.Component<'key.fact', true>;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
       'api::history-article.history-article'
     > &
       Schema.Attribute.Private;
+    mainImage: Schema.Attribute.Media<'images'>;
     publishedAt: Schema.Attribute.DateTime;
     readingTime: Schema.Attribute.Integer &
       Schema.Attribute.SetMinMax<
@@ -623,6 +682,7 @@ export interface ApiHistoryArticleHistoryArticle
         number
       > &
       Schema.Attribute.DefaultTo<5>;
+    sections: Schema.Attribute.Component<'article.section', true>;
     slug: Schema.Attribute.UID<'title'> & Schema.Attribute.Required;
     sources: Schema.Attribute.JSON;
     subtitle: Schema.Attribute.String &
@@ -630,11 +690,13 @@ export interface ApiHistoryArticleHistoryArticle
         maxLength: 300;
       }>;
     tags: Schema.Attribute.JSON;
+    timeline: Schema.Attribute.Component<'timeline.event', true>;
     title: Schema.Attribute.String &
       Schema.Attribute.Required &
       Schema.Attribute.SetMinMaxLength<{
         maxLength: 255;
       }>;
+    unitTypes: Schema.Attribute.Component<'unit.type', true>;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -1154,6 +1216,7 @@ declare module '@strapi/strapi' {
       'api::activity.activity': ApiActivityActivity;
       'api::event.event': ApiEventEvent;
       'api::gallery-item.gallery-item': ApiGalleryItemGalleryItem;
+      'api::gallery-photo.gallery-photo': ApiGalleryPhotoGalleryPhoto;
       'api::history-article.history-article': ApiHistoryArticleHistoryArticle;
       'plugin::content-releases.release': PluginContentReleasesRelease;
       'plugin::content-releases.release-action': PluginContentReleasesReleaseAction;

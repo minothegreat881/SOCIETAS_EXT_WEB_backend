@@ -10,16 +10,17 @@ export default [
         'http://localhost:3001', 
         'http://localhost:3002',
         'http://localhost:3003',
-        'http://localhost:3004',
+        'http://localhost:3004',  // Current frontend port
         'http://localhost:3005',
         'http://localhost:3006',
         'http://localhost:3007',
         'http://localhost:3008',
         'http://localhost:3009',
         'http://localhost:3010',
-        'http://localhost:3020',  // Current frontend port
+        'http://localhost:3020',
         'http://127.0.0.1:3000',
         'http://127.0.0.1:3001',
+        'http://127.0.0.1:3004',  // Current frontend port
         'http://127.0.0.1:3020',
         'https://*.vercel.app',
         'https://scear-frontend.vercel.app'

@@ -42,9 +42,21 @@
       "required": false,
       "allowedTypes": ["images"]
     },
+    "heroImage": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": ["images"]
+    },
+    "mainImage": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": ["images"]
+    },
     "category": {
       "type": "enumeration",
-      "enum": ["auxiliary-forces", "equipment", "tactics", "history", "archaeology", "sources"],
+      "enum": ["auxiliary-forces", "equipment", "tactics", "history", "archaeology", "sources", "legion-history"],
       "required": true,
       "default": "auxiliary-forces"
     },
@@ -75,6 +87,42 @@
     "sources": {
       "type": "json",
       "required": false
+    },
+    "intro": {
+      "type": "text",
+      "required": false,
+      "maxLength": 2000
+    },
+    "sections": {
+      "type": "component",
+      "repeatable": true,
+      "component": "article.section"
+    },
+    "images": {
+      "type": "component",
+      "repeatable": true,
+      "component": "article.image"
+    },
+    "keyFacts": {
+      "type": "component",
+      "repeatable": true,
+      "component": "key.fact"
+    },
+    "timeline": {
+      "type": "component",
+      "repeatable": true,
+      "component": "timeline.event"
+    },
+    "unitTypes": {
+      "type": "component",
+      "repeatable": true,
+      "component": "unit.type"
+    },
+    "articleType": {
+      "type": "enumeration",
+      "enum": ["standard", "auxiliary-forces", "legion-timeline"],
+      "required": true,
+      "default": "standard"
     }
   }
 }

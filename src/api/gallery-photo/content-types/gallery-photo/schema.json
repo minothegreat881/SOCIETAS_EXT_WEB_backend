@@ -1,0 +1,62 @@
+{
+  "kind": "collectionType",
+  "collectionName": "gallery_photos",
+  "info": {
+    "singularName": "gallery-photo",
+    "pluralName": "gallery-photos", 
+    "displayName": "Gallery Photo",
+    "description": "Photos for the gallery section"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true,
+      "maxLength": 255
+    },
+    "alt": {
+      "type": "string",
+      "required": false,
+      "maxLength": 255
+    },
+    "description": {
+      "type": "text",
+      "required": false
+    },
+    "location": {
+      "type": "string",
+      "required": false,
+      "maxLength": 200
+    },
+    "activity": {
+      "type": "string",
+      "required": false,
+      "maxLength": 200
+    },
+    "category": {
+      "type": "enumeration",
+      "enum": ["Equipment", "Training", "Military", "Reenactments", "Festivals", "Culture", "Camps"],
+      "required": true,
+      "default": "Training"
+    },
+    "featured": {
+      "type": "boolean",
+      "default": false
+    },
+    "sortOrder": {
+      "type": "integer",
+      "required": false,
+      "min": 0,
+      "default": 0
+    },
+    "photo": {
+      "type": "media",
+      "multiple": false,
+      "required": true,
+      "allowedTypes": ["images"]
+    }
+  }
+}

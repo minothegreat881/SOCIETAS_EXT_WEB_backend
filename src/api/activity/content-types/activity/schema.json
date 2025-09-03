@@ -5,7 +5,7 @@
     "singularName": "activity",
     "pluralName": "activities",
     "displayName": "Activity",
-    "description": "SCEAR training activities and club meetings for member recruitment"
+    "description": "SCEAR training activities and club meetings"
   },
   "options": {
     "draftAndPublish": true
@@ -26,7 +26,7 @@
       "required": true
     },
     "endDate": {
-      "type": "datetime", 
+      "type": "datetime",
       "required": true
     },
     "locationName": {
@@ -35,12 +35,10 @@
       "maxLength": 200
     },
     "locationAddress": {
-      "type": "text",
-      "required": true
+      "type": "text"
     },
     "coordinates": {
-      "type": "json",
-      "required": false
+      "type": "json"
     },
     "image": {
       "type": "media",
@@ -53,40 +51,6 @@
       "enum": ["training", "meeting", "workshop", "introduction"],
       "required": true,
       "default": "training"
-    },
-    "maxParticipants": {
-      "type": "integer",
-      "required": false,
-      "min": 1,
-      "default": 20
-    },
-    "currentParticipants": {
-      "type": "integer",
-      "required": false,
-      "min": 0,
-      "default": 0
-    },
-    "recurring": {
-      "type": "boolean",
-      "default": false
-    },
-    "visible": {
-      "type": "boolean",
-      "default": true
-    },
-    "featured": {
-      "type": "boolean",
-      "default": false
-    },
-    "requiresExperience": {
-      "type": "boolean",
-      "default": false
-    },
-    "difficulty": {
-      "type": "enumeration",
-      "enum": ["beginner", "intermediate", "advanced"],
-      "required": false,
-      "default": "beginner"
     }
   }
 }

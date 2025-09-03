@@ -1,0 +1,25 @@
+{
+  "collectionName": "components_key_facts",
+  "info": {
+    "displayName": "Key Fact",
+    "description": "Key facts or statistics for articles"
+  },
+  "options": {},
+  "attributes": {
+    "number": {
+      "type": "integer",
+      "required": true,
+      "min": 1
+    },
+    "title": {
+      "type": "string",
+      "required": true,
+      "maxLength": 100
+    },
+    "description": {
+      "type": "string",
+      "required": true,
+      "maxLength": 300
+    }
+  }
+}

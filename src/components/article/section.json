@@ -1,0 +1,28 @@
+{
+  "collectionName": "components_article_sections",
+  "info": {
+    "displayName": "Article Section",
+    "description": "A content section within an article"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true,
+      "maxLength": 255
+    },
+    "content": {
+      "type": "text",
+      "required": true
+    },
+    "quote": {
+      "type": "text",
+      "required": false,
+      "maxLength": 1000
+    },
+    "additionalContent": {
+      "type": "json",
+      "required": false
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "collectionName": "components_unit_types",
+  "info": {
+    "displayName": "Unit Type",
+    "description": "Military unit types and their descriptions"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true,
+      "maxLength": 100
+    },
+    "units": {
+      "type": "json",
+      "required": true
+    }
+  }
+}

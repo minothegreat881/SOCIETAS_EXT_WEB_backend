@@ -10,6 +10,8 @@
     "dev": "strapi develop",
     "develop": "strapi develop",
     "start": "strapi start",
+    "start:prod": "NODE_ENV=production strapi start",
+    "build:prod": "NODE_ENV=production strapi build",
     "strapi": "strapi",
     "upgrade": "npx @strapi/upgrade latest",
     "upgrade:dry": "npx @strapi/upgrade latest --dry"

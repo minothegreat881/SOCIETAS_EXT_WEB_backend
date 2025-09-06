@@ -6,7 +6,7 @@ export default {
       handler: 'raw-upload.upload',
       config: {
         policies: [],
-        middlewares: [],
+        middlewares: ['strapi::cors'],
       },
     },
   ],

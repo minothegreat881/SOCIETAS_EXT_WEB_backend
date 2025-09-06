@@ -22,7 +22,7 @@ export default [
         'http://127.0.0.1:3001',
         'http://127.0.0.1:3004',  // Current frontend port
         'http://127.0.0.1:3020',
-        'https://*.vercel.app',
+        'https://v0-s-c-e-a-r-website-design.vercel.app',  // Current Vercel deployment
         'https://scear-frontend.vercel.app'
       ],
       methods: ['GET', 'POST', 'PUT', 'DELETE', 'HEAD', 'OPTIONS'],

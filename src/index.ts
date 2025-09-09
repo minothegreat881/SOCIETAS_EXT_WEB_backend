@@ -70,18 +70,31 @@ export default {
             ],
           });
         } else {
-          // Enable existing permissions
-          await strapi.db.query('plugin::users-permissions.permission').updateMany({
+          // Enable existing permissions only if there are disabled ones
+          const disabledPermissions = await strapi.db.query('plugin::users-permissions.permission').findMany({
             where: {
               role: publicRole.id,
               action: {
                 $startsWith: 'api::activity',
               },
-            },
-            data: {
-              enabled: true,
+              enabled: false,
             },
           });
+
+          if (disabledPermissions.length > 0) {
+            await strapi.db.query('plugin::users-permissions.permission').updateMany({
+              where: {
+                role: publicRole.id,
+                action: {
+                  $startsWith: 'api::activity',
+                },
+                enabled: false,
+              },
+              data: {
+                enabled: true,
+              },
+            });
+          }
         }
 
         console.log('✅ Activities API permissions enabled for public access');

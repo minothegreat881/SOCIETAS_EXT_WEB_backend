@@ -21,20 +21,16 @@
       "type": "richtext",
       "required": true
     },
-    "startDate": {
+    "eventDate": {
       "type": "datetime",
       "required": true
     },
     "endDate": {
       "type": "datetime"
     },
-    "locationName": {
+    "location": {
       "type": "string",
       "required": true
-    },
-    "locationAddress": {
-      "type": "string",
-      "required": false
     },
     "coordinates": {
       "type": "component",
@@ -57,7 +53,7 @@
       "type": "boolean",
       "default": false
     },
-    "image": {
+    "coverImage": {
       "type": "media",
       "multiple": false,
       "required": false,

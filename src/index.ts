@@ -252,6 +252,20 @@ export default {
       'api::event.event.delete',
     ];
 
+    // Create permissions for history-articles (FULL CRUD operations)
+    const historyArticleActions = [
+      'api::history-article.history-article.find',
+      'api::history-article.history-article.findOne',
+      'api::history-article.history-article.create',
+      'api::history-article.history-article.update',
+      'api::history-article.history-article.delete',
+    ];
+
+    // Create permissions for raw-upload (FILE UPLOAD operations)
+    const rawUploadActions = [
+      'api::raw-upload.raw-upload.create',
+    ];
+
     // Setup permissions for both public and authenticated roles
     for (const role of [publicRole, authenticatedRole]) {
       // Get current permissions for the role
@@ -348,6 +362,64 @@ export default {
         console.log(`✅ Events API permissions created for ${role.type} role`);
       } else {
         console.log(`✅ Events API permissions already exist for ${role.type} role`);
+      }
+
+      // Setup History Articles permissions
+      const historyArticlePermissions = currentPermissions.filter(
+        (permission) => 
+          historyArticleActions.includes(permission.action)
+      );
+
+      if (historyArticlePermissions.length < historyArticleActions.length) {
+        console.log(`⚙️ Creating History Articles API permissions for ${role.type} role`);
+        
+        for (const action of historyArticleActions) {
+          const exists = currentPermissions.some(p => p.action === action);
+          if (!exists) {
+            await strapi.query('plugin::users-permissions.permission').create({
+              data: {
+                action,
+                subject: null,
+                properties: {},
+                conditions: [],
+                role: role.id,
+              },
+            });
+          }
+        }
+
+        console.log(`✅ History Articles API permissions created for ${role.type} role`);
+      } else {
+        console.log(`✅ History Articles API permissions already exist for ${role.type} role`);
+      }
+
+      // Setup Raw Upload permissions
+      const rawUploadPermissions = currentPermissions.filter(
+        (permission) => 
+          rawUploadActions.includes(permission.action)
+      );
+
+      if (rawUploadPermissions.length < rawUploadActions.length) {
+        console.log(`⚙️ Creating Raw Upload API permissions for ${role.type} role`);
+        
+        for (const action of rawUploadActions) {
+          const exists = currentPermissions.some(p => p.action === action);
+          if (!exists) {
+            await strapi.query('plugin::users-permissions.permission').create({
+              data: {
+                action,
+                subject: null,
+                properties: {},
+                conditions: [],
+                role: role.id,
+              },
+            });
+          }
+        }
+
+        console.log(`✅ Raw Upload API permissions created for ${role.type} role`);
+      } else {
+        console.log(`✅ Raw Upload API permissions already exist for ${role.type} role`);
       }
     }
   },

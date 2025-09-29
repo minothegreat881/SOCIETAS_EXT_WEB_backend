@@ -1,0 +1,31 @@
+{
+    "collectionName": "components_article_images",
+    "info": {
+        "displayName": "Article Image",
+        "description": "Image with caption and description for articles"
+    },
+    "options": {},
+    "attributes": {
+        "image": {
+            "type": "media",
+            "multiple": false,
+            "required": true,
+            "allowedTypes": ["images"]
+        },
+        "alt": {
+            "type": "string",
+            "required": true,
+            "maxLength": 255
+        },
+        "caption": {
+            "type": "string",
+            "required": true,
+            "maxLength": 255
+        },
+        "description": {
+            "type": "text",
+            "required": false,
+            "maxLength": 500
+        }
+    }
+}

@@ -1,0 +1,49 @@
+{
+    "collectionName": "components_content_floating_text_images",
+    "info": {
+        "displayName": "Content Image",
+        "description": "Universal text and image component with perfect text wrapping capabilities"
+    },
+    "options": {},
+    "attributes": {
+        "content": {
+            "type": "text",
+            "required": true
+        },
+        "image": {
+            "type": "media",
+            "multiple": false,
+            "allowedTypes": ["images"]
+        },
+        "alt": {
+            "type": "string"
+        },
+        "caption": {
+            "type": "string"
+        },
+        "position": {
+            "type": "enumeration",
+            "enum": ["left", "right", "center", "full-width"],
+            "default": "left"
+        },
+        "size": {
+            "type": "enumeration",
+            "enum": ["small", "medium", "large", "full"],
+            "default": "medium"
+        },
+        "alignment": {
+            "type": "enumeration",
+            "enum": ["left", "center", "right", "justify"],
+            "default": "justify"
+        },
+        "spacing": {
+            "type": "enumeration",
+            "enum": ["none", "small", "medium", "large"],
+            "default": "medium"
+        },
+        "shadow": {
+            "type": "boolean",
+            "default": true
+        }
+    }
+}

@@ -1,0 +1,56 @@
+{
+    "kind": "collectionType",
+    "collectionName": "activities",
+    "info": {
+        "singularName": "activity",
+        "pluralName": "activities",
+        "displayName": "Activity",
+        "description": "SCEAR training activities and club meetings"
+    },
+    "options": {
+        "draftAndPublish": true
+    },
+    "pluginOptions": {},
+    "attributes": {
+        "title": {
+            "type": "string",
+            "required": true,
+            "maxLength": 255
+        },
+        "description": {
+            "type": "richtext",
+            "required": true
+        },
+        "startDate": {
+            "type": "datetime",
+            "required": true
+        },
+        "endDate": {
+            "type": "datetime",
+            "required": true
+        },
+        "locationName": {
+            "type": "string",
+            "required": true,
+            "maxLength": 200
+        },
+        "locationAddress": {
+            "type": "text"
+        },
+        "coordinates": {
+            "type": "json"
+        },
+        "image": {
+            "type": "media",
+            "multiple": false,
+            "required": false,
+            "allowedTypes": ["images"]
+        },
+        "category": {
+            "type": "enumeration",
+            "enum": ["training", "meeting", "workshop", "introduction"],
+            "required": true,
+            "default": "training"
+        }
+    }
+}

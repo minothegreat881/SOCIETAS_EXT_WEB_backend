@@ -1,0 +1,28 @@
+{
+  "collectionName": "components_shared_unit_types",
+  "info": {
+    "displayName": "Unit Type",
+    "icon": "users",
+    "description": "Military unit type"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true,
+      "maxLength": 255
+    },
+    "units": {
+      "type": "json",
+      "required": true
+    },
+    "description": {
+      "type": "text",
+      "maxLength": 500
+    },
+    "icon": {
+      "type": "string",
+      "maxLength": 50
+    }
+  }
+}

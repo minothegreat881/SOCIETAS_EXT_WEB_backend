@@ -1,0 +1,54 @@
+{
+  "collectionName": "components_content_content_images",
+  "info": {
+    "displayName": "Content Image",
+    "description": "Floating image with text wrap for article content",
+    "icon": "picture"
+  },
+  "options": {},
+  "attributes": {
+    "image": {
+      "type": "media",
+      "multiple": false,
+      "required": true,
+      "allowedTypes": ["images"]
+    },
+    "caption": {
+      "type": "string",
+      "maxLength": 500
+    },
+    "alt": {
+      "type": "string",
+      "required": true,
+      "maxLength": 255
+    },
+    "position": {
+      "type": "enumeration",
+      "enum": ["left", "right", "center", "full"],
+      "default": "left",
+      "required": true
+    },
+    "width": {
+      "type": "enumeration",
+      "enum": ["30", "40", "50", "60", "100"],
+      "default": "50",
+      "required": true
+    },
+    "showCaption": {
+      "type": "boolean",
+      "default": true
+    },
+    "rounded": {
+      "type": "boolean",
+      "default": true
+    },
+    "shadow": {
+      "type": "boolean",
+      "default": true
+    },
+    "pairWithNext": {
+      "type": "boolean",
+      "default": false
+    }
+  }
+}

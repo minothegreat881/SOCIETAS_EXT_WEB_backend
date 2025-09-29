@@ -1,0 +1,31 @@
+{
+  "collectionName": "components_sidebar_timelines",
+  "info": {
+    "displayName": "Timeline",
+    "icon": "clock",
+    "description": "Timeline section for sidebar"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "default": "Časová os",
+      "required": true
+    },
+    "events": {
+      "type": "component",
+      "repeatable": true,
+      "component": "shared.timeline-event",
+      "required": true,
+      "min": 1
+    },
+    "orientation": {
+      "type": "enumeration",
+      "enum": [
+        "vertical",
+        "horizontal"
+      ],
+      "default": "vertical"
+    }
+  }
+}

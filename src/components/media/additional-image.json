@@ -1,0 +1,46 @@
+{
+  "collectionName": "components_media_additional_images",
+  "info": {
+    "displayName": "Additional Image",
+    "icon": "picture",
+    "description": "Additional image with metadata"
+  },
+  "options": {},
+  "attributes": {
+    "image": {
+      "type": "media",
+      "multiple": false,
+      "required": true,
+      "allowedTypes": ["images"]
+    },
+    "alt": {
+      "type": "string",
+      "required": false,
+      "maxLength": 255
+    },
+    "caption": {
+      "type": "string",
+      "required": false
+    },
+    "position": {
+      "type": "enumeration",
+      "enum": [
+        "left",
+        "center",
+        "right",
+        "full-width"
+      ],
+      "default": "center"
+    },
+    "size": {
+      "type": "enumeration",
+      "enum": [
+        "small",
+        "medium",
+        "large",
+        "full"
+      ],
+      "default": "medium"
+    }
+  }
+}

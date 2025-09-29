@@ -1,0 +1,32 @@
+{
+  "collectionName": "components_sidebar_key_facts",
+  "info": {
+    "displayName": "Key Facts",
+    "icon": "list",
+    "description": "Key facts section for sidebar"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "default": "Kľúčové fakty",
+      "required": true
+    },
+    "facts": {
+      "type": "component",
+      "repeatable": true,
+      "component": "shared.fact-item",
+      "required": true,
+      "min": 1
+    },
+    "style": {
+      "type": "enumeration",
+      "enum": [
+        "numbered-circles",
+        "icons",
+        "cards"
+      ],
+      "default": "numbered-circles"
+    }
+  }
+}

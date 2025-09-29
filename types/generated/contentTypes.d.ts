@@ -397,23 +397,24 @@ export interface ApiActivityActivity extends Struct.CollectionTypeSchema {
     > &
       Schema.Attribute.Required;
     coordinates: Schema.Attribute.Component<'location.coordinates', false>;
-    coverImage: Schema.Attribute.Media<'images'>;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
     description: Schema.Attribute.RichText & Schema.Attribute.Required;
     endDate: Schema.Attribute.DateTime;
-    eventDate: Schema.Attribute.DateTime & Schema.Attribute.Required;
     featured: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
+    image: Schema.Attribute.Media<'images'>;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
       'api::activity.activity'
     > &
       Schema.Attribute.Private;
-    location: Schema.Attribute.String & Schema.Attribute.Required;
+    locationAddress: Schema.Attribute.String;
+    locationName: Schema.Attribute.String & Schema.Attribute.Required;
     publishedAt: Schema.Attribute.DateTime;
     sortOrder: Schema.Attribute.Integer & Schema.Attribute.DefaultTo<0>;
+    startDate: Schema.Attribute.DateTime & Schema.Attribute.Required;
     title: Schema.Attribute.String &
       Schema.Attribute.Required &
       Schema.Attribute.SetMinMaxLength<{
@@ -584,7 +585,7 @@ export interface ApiHistoryArticleHistoryArticle
   extends Struct.CollectionTypeSchema {
   collectionName: 'history_articles';
   info: {
-    description: 'Historical articles with rich content and multiple images';
+    description: 'Rich content articles with blocks editor support';
     displayName: 'History Article';
     pluralName: 'history-articles';
     singularName: 'history-article';
@@ -599,59 +600,86 @@ export interface ApiHistoryArticleHistoryArticle
       }>;
     category: Schema.Attribute.Enumeration<
       [
-        'Historical Research',
-        'Military History',
-        'Culture & Society',
-        'Archaeological Finds',
-        'Reenactment Guides',
-        'Equipment & Arms',
+        'auxiliary-forces',
+        'legion-history',
+        'equipment',
+        'tactics',
+        'culture',
+        'archaeology',
       ]
     > &
       Schema.Attribute.Required &
-      Schema.Attribute.DefaultTo<'Historical Research'>;
+      Schema.Attribute.DefaultTo<'legion-history'>;
+    contentImages: Schema.Attribute.Component<'content.content-image', true>;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
-    description: Schema.Attribute.Text &
-      Schema.Attribute.Required &
+    featured: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
+    heroDescription: Schema.Attribute.Text &
       Schema.Attribute.SetMinMaxLength<{
         maxLength: 500;
       }>;
-    featured: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
-    heroImage: Schema.Attribute.Media<'images'> & Schema.Attribute.Required;
-    images: Schema.Attribute.Media<'images', true>;
-    intro: Schema.Attribute.RichText & Schema.Attribute.Required;
-    keyFacts: Schema.Attribute.JSON;
+    heroImage: Schema.Attribute.Media<'images'>;
+    heroTitle: Schema.Attribute.String &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 255;
+      }>;
+    keywords: Schema.Attribute.JSON;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
       'api::history-article.history-article'
     > &
       Schema.Attribute.Private;
-    mainContent: Schema.Attribute.RichText & Schema.Attribute.Required;
+    mainContent: Schema.Attribute.Blocks & Schema.Attribute.Required;
     mainImage: Schema.Attribute.Media<'images'>;
+    mainImageCaption: Schema.Attribute.String &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 255;
+      }>;
+    mainImageDescription: Schema.Attribute.Text &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 500;
+      }>;
     publishedAt: Schema.Attribute.DateTime;
     publishedDate: Schema.Attribute.Date & Schema.Attribute.Required;
-    quotes: Schema.Attribute.JSON;
-    readTime: Schema.Attribute.Integer;
+    readingTime: Schema.Attribute.Integer &
+      Schema.Attribute.SetMinMax<
+        {
+          min: 1;
+        },
+        number
+      >;
     seoDescription: Schema.Attribute.Text &
       Schema.Attribute.SetMinMaxLength<{
         maxLength: 160;
       }>;
+    seoImage: Schema.Attribute.Media<'images'>;
     seoTitle: Schema.Attribute.String &
       Schema.Attribute.SetMinMaxLength<{
         maxLength: 60;
       }>;
+    sidebarComponents: Schema.Attribute.DynamicZone<
+      [
+        'sidebar.key-facts',
+        'sidebar.timeline',
+        'sidebar.unit-types',
+        'sidebar.related-articles',
+      ]
+    >;
     slug: Schema.Attribute.UID<'title'> & Schema.Attribute.Required;
     sortOrder: Schema.Attribute.Integer & Schema.Attribute.DefaultTo<0>;
-    tags: Schema.Attribute.JSON;
-    timeline: Schema.Attribute.JSON;
+    status: Schema.Attribute.Enumeration<['draft', 'published', 'archived']> &
+      Schema.Attribute.DefaultTo<'draft'>;
+    subtitle: Schema.Attribute.Text &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 500;
+      }>;
     title: Schema.Attribute.String &
       Schema.Attribute.Required &
       Schema.Attribute.SetMinMaxLength<{
         maxLength: 255;
       }>;
-    unitTypes: Schema.Attribute.JSON;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;

@@ -1,0 +1,26 @@
+{
+  "collectionName": "components_shared_fact_items",
+  "info": {
+    "displayName": "Fact Item",
+    "icon": "info",
+    "description": "Single fact item"
+  },
+  "options": {},
+  "attributes": {
+    "number": {
+      "type": "integer",
+      "required": true,
+      "min": 1
+    },
+    "title": {
+      "type": "string",
+      "required": true,
+      "maxLength": 255
+    },
+    "description": {
+      "type": "text",
+      "required": true,
+      "maxLength": 500
+    }
+  }
+}

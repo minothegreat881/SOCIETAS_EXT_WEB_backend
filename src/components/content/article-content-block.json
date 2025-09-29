@@ -1,0 +1,43 @@
+{
+  "collectionName": "components_content_article_content_blocks",
+  "info": {
+    "displayName": "Article Content Block",
+    "description": "Mixed content block for articles with text and images",
+    "icon": "layout"
+  },
+  "options": {},
+  "attributes": {
+    "type": {
+      "type": "enumeration",
+      "enum": ["paragraph", "heading", "image", "quote", "list", "code", "table"],
+      "required": true,
+      "default": "paragraph"
+    },
+    "content": {
+      "type": "blocks"
+    },
+    "contentImage": {
+      "type": "component",
+      "repeatable": false,
+      "component": "content.content-image"
+    },
+    "headingLevel": {
+      "type": "enumeration",
+      "enum": ["h1", "h2", "h3", "h4", "h5", "h6"],
+      "default": "h2"
+    },
+    "listType": {
+      "type": "enumeration",
+      "enum": ["ordered", "unordered"],
+      "default": "unordered"
+    },
+    "codeLanguage": {
+      "type": "string",
+      "maxLength": 50
+    },
+    "quoteAuthor": {
+      "type": "string",
+      "maxLength": 255
+    }
+  }
+}

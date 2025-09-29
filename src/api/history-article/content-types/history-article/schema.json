@@ -5,7 +5,7 @@
     "singularName": "history-article",
     "pluralName": "history-articles",
     "displayName": "History Article",
-    "description": "Historical articles with rich content and multiple images"
+    "description": "Rich content articles with blocks editor support"
   },
   "options": {
     "draftAndPublish": true
@@ -22,10 +22,35 @@
       "targetField": "title",
       "required": true
     },
-    "description": {
+    "subtitle": {
       "type": "text",
-      "required": true,
       "maxLength": 500
+    },
+    "category": {
+      "type": "enumeration",
+      "enum": [
+        "auxiliary-forces",
+        "legion-history",
+        "equipment",
+        "tactics",
+        "culture",
+        "archaeology"
+      ],
+      "required": true,
+      "default": "legion-history"
+    },
+    "publishedDate": {
+      "type": "date",
+      "required": true
+    },
+    "featured": {
+      "type": "boolean",
+      "default": false
+    },
+    "status": {
+      "type": "enumeration",
+      "enum": ["draft", "published", "archived"],
+      "default": "draft"
     },
     "heroImage": {
       "type": "media",
@@ -33,87 +58,45 @@
       "required": false,
       "allowedTypes": ["images"]
     },
-    "coverImage": {
+    "heroTitle": {
+      "type": "string",
+      "maxLength": 255
+    },
+    "heroDescription": {
+      "type": "text",
+      "maxLength": 500
+    },
+    "mainImage": {
       "type": "media",
       "multiple": false,
       "required": false,
       "allowedTypes": ["images"]
     },
-    "mainImage": {
-      "type": "media", 
-      "multiple": false,
-      "required": false,
-      "allowedTypes": ["images"]
-    },
-    "category": {
-      "type": "enumeration",
-      "enum": [
-        "Historical Research",
-        "Military History",
-        "Culture & Society", 
-        "Archaeological Finds",
-        "Reenactment Guides",
-        "Equipment & Arms"
-      ],
-      "required": true,
-      "default": "Historical Research"
-    },
-    "intro": {
-      "type": "richtext",
-      "required": true
-    },
-    "mainContent": {
-      "type": "richtext",
-      "required": true,
-      "description": "Main article content using rich text editor"
-    },
-    "keyFacts": {
-      "type": "json",
-      "description": "Array of key facts with number, title, description"
-    },
-    "unitTypes": {
-      "type": "json", 
-      "description": "Array of unit types with title and units"
-    },
-    "timeline": {
-      "type": "json",
-      "description": "Timeline events with year and event description"
-    },
-    "quotes": {
-      "type": "json",
-      "description": "Array of highlighted quotes"
-    },
-    "sections": {
-      "type": "json",
-      "description": "Array of content sections with title, content, additionalContent, and quote"
-    },
-    "images": {
-      "type": "json",
-      "description": "Array of image objects with metadata"
-    },
-    "featured": {
-      "type": "boolean",
-      "default": false
-    },
-    "publishedDate": {
-      "type": "date",
-      "required": true
-    },
-    "author": {
+    "mainImageCaption": {
       "type": "string",
       "maxLength": 255
     },
-    "tags": {
-      "type": "json",
-      "description": "Array of tags for filtering and search"
+    "mainImageDescription": {
+      "type": "text",
+      "maxLength": 500
     },
-    "readTime": {
-      "type": "integer",
-      "description": "Estimated reading time in minutes"
+    "mainContent": {
+      "type": "blocks",
+      "required": true
     },
-    "sortOrder": {
-      "type": "integer",
-      "default": 0
+    "contentImages": {
+      "type": "component",
+      "repeatable": true,
+      "component": "content.content-image"
+    },
+    "sidebarComponents": {
+      "type": "dynamiczone",
+      "components": [
+        "sidebar.key-facts",
+        "sidebar.timeline",
+        "sidebar.unit-types",
+        "sidebar.related-articles"
+      ]
     },
     "seoTitle": {
       "type": "string",
@@ -122,6 +105,27 @@
     "seoDescription": {
       "type": "text",
       "maxLength": 160
+    },
+    "seoImage": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": ["images"]
+    },
+    "keywords": {
+      "type": "json"
+    },
+    "author": {
+      "type": "string",
+      "maxLength": 255
+    },
+    "readingTime": {
+      "type": "integer",
+      "min": 1
+    },
+    "sortOrder": {
+      "type": "integer",
+      "default": 0
     }
   }
 }

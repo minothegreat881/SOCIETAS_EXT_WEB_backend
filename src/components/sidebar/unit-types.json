@@ -1,0 +1,23 @@
+{
+  "collectionName": "components_sidebar_unit_types",
+  "info": {
+    "displayName": "Unit Types",
+    "icon": "shield",
+    "description": "Unit types section for auxiliary forces"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "default": "Typy jednotiek",
+      "required": true
+    },
+    "types": {
+      "type": "component",
+      "repeatable": true,
+      "component": "shared.unit-type",
+      "required": true,
+      "min": 1
+    }
+  }
+}

@@ -17,9 +17,25 @@
       "required": true,
       "maxLength": 255
     },
+    "title_sk": {
+      "type": "string",
+      "required": true,
+      "maxLength": 255
+    },
+    "title_en": {
+      "type": "string",
+      "maxLength": 255
+    },
     "description": {
       "type": "text",
       "required": true
+    },
+    "description_sk": {
+      "type": "text",
+      "required": true
+    },
+    "description_en": {
+      "type": "text"
     },
     "startDate": {
       "type": "datetime",
@@ -33,9 +49,23 @@
       "type": "string",
       "required": true
     },
+    "locationName_sk": {
+      "type": "string",
+      "required": true
+    },
+    "locationName_en": {
+      "type": "string"
+    },
     "locationAddress": {
       "type": "string",
       "required": true
+    },
+    "locationAddress_sk": {
+      "type": "string",
+      "required": true
+    },
+    "locationAddress_en": {
+      "type": "string"
     },
     "coordinates": {
       "type": "component",

@@ -400,7 +400,9 @@ export interface ApiActivityActivity extends Struct.CollectionTypeSchema {
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
-    description: Schema.Attribute.RichText & Schema.Attribute.Required;
+    description: Schema.Attribute.RichText;
+    description_en: Schema.Attribute.RichText;
+    description_sk: Schema.Attribute.RichText & Schema.Attribute.Required;
     endDate: Schema.Attribute.DateTime;
     featured: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
     image: Schema.Attribute.Media<'images'>;
@@ -411,11 +413,23 @@ export interface ApiActivityActivity extends Struct.CollectionTypeSchema {
     > &
       Schema.Attribute.Private;
     locationAddress: Schema.Attribute.String;
-    locationName: Schema.Attribute.String & Schema.Attribute.Required;
+    locationAddress_en: Schema.Attribute.String;
+    locationAddress_sk: Schema.Attribute.String;
+    locationName: Schema.Attribute.String;
+    locationName_en: Schema.Attribute.String;
+    locationName_sk: Schema.Attribute.String & Schema.Attribute.Required;
     publishedAt: Schema.Attribute.DateTime;
     sortOrder: Schema.Attribute.Integer & Schema.Attribute.DefaultTo<0>;
     startDate: Schema.Attribute.DateTime & Schema.Attribute.Required;
     title: Schema.Attribute.String &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 255;
+      }>;
+    title_en: Schema.Attribute.String &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 255;
+      }>;
+    title_sk: Schema.Attribute.String &
       Schema.Attribute.Required &
       Schema.Attribute.SetMinMaxLength<{
         maxLength: 255;
@@ -477,19 +491,34 @@ export interface ApiEventEvent extends Struct.CollectionTypeSchema {
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
     description: Schema.Attribute.Text & Schema.Attribute.Required;
+    description_en: Schema.Attribute.Text;
+    description_sk: Schema.Attribute.Text & Schema.Attribute.Required;
     endDate: Schema.Attribute.DateTime & Schema.Attribute.Required;
     featured: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<'oneToMany', 'api::event.event'> &
       Schema.Attribute.Private;
     locationAddress: Schema.Attribute.String & Schema.Attribute.Required;
+    locationAddress_en: Schema.Attribute.String;
+    locationAddress_sk: Schema.Attribute.String & Schema.Attribute.Required;
     locationName: Schema.Attribute.String & Schema.Attribute.Required;
+    locationName_en: Schema.Attribute.String;
+    locationName_sk: Schema.Attribute.String & Schema.Attribute.Required;
     photo: Schema.Attribute.Media<'images'>;
     publishedAt: Schema.Attribute.DateTime;
     recurring: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
     sortOrder: Schema.Attribute.Integer & Schema.Attribute.DefaultTo<0>;
     startDate: Schema.Attribute.DateTime & Schema.Attribute.Required;
     title: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 255;
+      }>;
+    title_en: Schema.Attribute.String &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 255;
+      }>;
+    title_sk: Schema.Attribute.String &
       Schema.Attribute.Required &
       Schema.Attribute.SetMinMaxLength<{
         maxLength: 255;
@@ -619,8 +648,24 @@ export interface ApiHistoryArticleHistoryArticle
       Schema.Attribute.SetMinMaxLength<{
         maxLength: 500;
       }>;
+    heroDescription_en: Schema.Attribute.Text &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 500;
+      }>;
+    heroDescription_sk: Schema.Attribute.Text &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 500;
+      }>;
     heroImage: Schema.Attribute.Media<'images'>;
     heroTitle: Schema.Attribute.String &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 255;
+      }>;
+    heroTitle_en: Schema.Attribute.String &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 255;
+      }>;
+    heroTitle_sk: Schema.Attribute.String &
       Schema.Attribute.SetMinMaxLength<{
         maxLength: 255;
       }>;
@@ -632,6 +677,8 @@ export interface ApiHistoryArticleHistoryArticle
     > &
       Schema.Attribute.Private;
     mainContent: Schema.Attribute.Blocks & Schema.Attribute.Required;
+    mainContent_en: Schema.Attribute.Blocks;
+    mainContent_sk: Schema.Attribute.Blocks & Schema.Attribute.Required;
     mainImage: Schema.Attribute.Media<'images'>;
     mainImageCaption: Schema.Attribute.String &
       Schema.Attribute.SetMinMaxLength<{
@@ -654,8 +701,24 @@ export interface ApiHistoryArticleHistoryArticle
       Schema.Attribute.SetMinMaxLength<{
         maxLength: 160;
       }>;
+    seoDescription_en: Schema.Attribute.Text &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 160;
+      }>;
+    seoDescription_sk: Schema.Attribute.Text &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 160;
+      }>;
     seoImage: Schema.Attribute.Media<'images'>;
     seoTitle: Schema.Attribute.String &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 60;
+      }>;
+    seoTitle_en: Schema.Attribute.String &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 60;
+      }>;
+    seoTitle_sk: Schema.Attribute.String &
       Schema.Attribute.SetMinMaxLength<{
         maxLength: 60;
       }>;
@@ -668,6 +731,7 @@ export interface ApiHistoryArticleHistoryArticle
       ]
     >;
     slug: Schema.Attribute.UID<'title'> & Schema.Attribute.Required;
+    slug_en: Schema.Attribute.UID<'title_en'>;
     sortOrder: Schema.Attribute.Integer & Schema.Attribute.DefaultTo<0>;
     status: Schema.Attribute.Enumeration<['draft', 'published', 'archived']> &
       Schema.Attribute.DefaultTo<'draft'>;
@@ -675,7 +739,24 @@ export interface ApiHistoryArticleHistoryArticle
       Schema.Attribute.SetMinMaxLength<{
         maxLength: 500;
       }>;
+    subtitle_en: Schema.Attribute.Text &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 500;
+      }>;
+    subtitle_sk: Schema.Attribute.Text &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 500;
+      }>;
     title: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 255;
+      }>;
+    title_en: Schema.Attribute.String &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 255;
+      }>;
+    title_sk: Schema.Attribute.String &
       Schema.Attribute.Required &
       Schema.Attribute.SetMinMaxLength<{
         maxLength: 255;

@@ -17,12 +17,33 @@
       "required": true,
       "maxLength": 255
     },
+    "title_sk": {
+      "type": "string",
+      "required": true,
+      "maxLength": 255
+    },
+    "title_en": {
+      "type": "string",
+      "maxLength": 255
+    },
     "slug": {
       "type": "uid",
       "targetField": "title",
       "required": true
     },
+    "slug_en": {
+      "type": "uid",
+      "targetField": "title_en"
+    },
     "subtitle": {
+      "type": "text",
+      "maxLength": 500
+    },
+    "subtitle_sk": {
+      "type": "text",
+      "maxLength": 500
+    },
+    "subtitle_en": {
       "type": "text",
       "maxLength": 500
     },
@@ -62,7 +83,23 @@
       "type": "string",
       "maxLength": 255
     },
+    "heroTitle_sk": {
+      "type": "string",
+      "maxLength": 255
+    },
+    "heroTitle_en": {
+      "type": "string",
+      "maxLength": 255
+    },
     "heroDescription": {
+      "type": "text",
+      "maxLength": 500
+    },
+    "heroDescription_sk": {
+      "type": "text",
+      "maxLength": 500
+    },
+    "heroDescription_en": {
       "type": "text",
       "maxLength": 500
     },
@@ -84,6 +121,13 @@
       "type": "blocks",
       "required": true
     },
+    "mainContent_sk": {
+      "type": "blocks",
+      "required": true
+    },
+    "mainContent_en": {
+      "type": "blocks"
+    },
     "contentImages": {
       "type": "component",
       "repeatable": true,
@@ -102,7 +146,23 @@
       "type": "string",
       "maxLength": 60
     },
+    "seoTitle_sk": {
+      "type": "string",
+      "maxLength": 60
+    },
+    "seoTitle_en": {
+      "type": "string",
+      "maxLength": 60
+    },
     "seoDescription": {
+      "type": "text",
+      "maxLength": 160
+    },
+    "seoDescription_sk": {
+      "type": "text",
+      "maxLength": 160
+    },
+    "seoDescription_en": {
       "type": "text",
       "maxLength": 160
     },

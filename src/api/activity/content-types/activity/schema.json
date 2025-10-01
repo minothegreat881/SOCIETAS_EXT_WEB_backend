@@ -14,12 +14,30 @@
   "attributes": {
     "title": {
       "type": "string",
+      "required": false,
+      "maxLength": 255
+    },
+    "title_sk": {
+      "type": "string",
       "required": true,
+      "maxLength": 255
+    },
+    "title_en": {
+      "type": "string",
+      "required": false,
       "maxLength": 255
     },
     "description": {
       "type": "richtext",
+      "required": false
+    },
+    "description_sk": {
+      "type": "richtext",
       "required": true
+    },
+    "description_en": {
+      "type": "richtext",
+      "required": false
     },
     "startDate": {
       "type": "datetime",
@@ -30,9 +48,25 @@
     },
     "locationName": {
       "type": "string",
+      "required": false
+    },
+    "locationName_sk": {
+      "type": "string",
       "required": true
     },
+    "locationName_en": {
+      "type": "string",
+      "required": false
+    },
     "locationAddress": {
+      "type": "string",
+      "required": false
+    },
+    "locationAddress_sk": {
+      "type": "string",
+      "required": false
+    },
+    "locationAddress_en": {
       "type": "string",
       "required": false
     },

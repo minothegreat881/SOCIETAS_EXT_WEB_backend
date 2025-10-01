@@ -61,3 +61,7 @@ out/
 # Uploads
 public/uploads/*
 !public/uploads/.gitkeep
+
+# Archives
+*.tar.gz
+*.zip

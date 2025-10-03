@@ -9,6 +9,7 @@ export default {
       path: '/raw-upload',
       handler: 'raw-upload.upload',
       config: {
+        auth: false,
         policies: [],
         middlewares: [],
       },

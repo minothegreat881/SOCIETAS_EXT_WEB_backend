@@ -1,0 +1,19 @@
+{
+  "kind": "singleType",
+  "collectionName": "raw_uploads",
+  "info": {
+    "singularName": "raw-upload",
+    "pluralName": "raw-uploads",
+    "displayName": "Raw Upload",
+    "description": "Raw upload API without image processing or rotation"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string"
+    }
+  }
+}

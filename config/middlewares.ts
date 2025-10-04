@@ -10,9 +10,7 @@ export default [
       origin: [
         'https://www.autoweb.store',
         'https://autoweb.store',
-        'https://v0-s-c-e-a-r-website-design-ljmav4tve.vercel.app',
-        'https://v0-s-c-e-a-r-website-design-lcmvkpa2j.vercel.app',
-        'https://v0-s-c-e-a-r-website-design-a9iau7asm.vercel.app',
+        'https://*.vercel.app',
         'https://api.autoweb.store',
         'http://localhost:3000',
         'http://localhost:3001',

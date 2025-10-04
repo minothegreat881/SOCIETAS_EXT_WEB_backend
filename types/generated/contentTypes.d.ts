@@ -767,6 +767,35 @@ export interface ApiHistoryArticleHistoryArticle
   };
 }
 
+export interface ApiRawUploadRawUpload extends Struct.SingleTypeSchema {
+  collectionName: 'raw_uploads';
+  info: {
+    description: 'Raw upload API without image processing or rotation';
+    displayName: 'Raw Upload';
+    pluralName: 'raw-uploads';
+    singularName: 'raw-upload';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::raw-upload.raw-upload'
+    > &
+      Schema.Attribute.Private;
+    publishedAt: Schema.Attribute.DateTime;
+    title: Schema.Attribute.String;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface PluginContentReleasesRelease
   extends Struct.CollectionTypeSchema {
   collectionName: 'strapi_releases';
@@ -1281,6 +1310,7 @@ declare module '@strapi/strapi' {
       'api::event.event': ApiEventEvent;
       'api::gallery-photo.gallery-photo': ApiGalleryPhotoGalleryPhoto;
       'api::history-article.history-article': ApiHistoryArticleHistoryArticle;
+      'api::raw-upload.raw-upload': ApiRawUploadRawUpload;
       'plugin::content-releases.release': PluginContentReleasesRelease;
       'plugin::content-releases.release-action': PluginContentReleasesReleaseAction;
       'plugin::i18n.locale': PluginI18NLocale;

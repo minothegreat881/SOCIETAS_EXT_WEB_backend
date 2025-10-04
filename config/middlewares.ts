@@ -14,6 +14,7 @@ export default [
         'https://api.autoweb.store',
         'http://localhost:3000',
         'http://localhost:3001',
+        'http://localhost:3002',
       ],
     },
   },

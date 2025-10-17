@@ -1,0 +1,34 @@
+{
+  "kind": "singleType",
+  "collectionName": "hero_images_configs",
+  "info": {
+    "singularName": "hero-images-config",
+    "pluralName": "hero-images-configs",
+    "displayName": "Hero Images Config",
+    "description": "Configuration for hero images across all pages"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "homePage": {
+      "type": "text"
+    },
+    "historyPage": {
+      "type": "text"
+    },
+    "eventsPage": {
+      "type": "text"
+    },
+    "galleryPage": {
+      "type": "text"
+    },
+    "servicesPage": {
+      "type": "text"
+    },
+    "joinUsPage": {
+      "type": "text"
+    }
+  }
+}

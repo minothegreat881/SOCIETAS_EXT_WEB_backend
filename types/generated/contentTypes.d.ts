@@ -610,6 +610,41 @@ export interface ApiGalleryPhotoGalleryPhoto
   };
 }
 
+export interface ApiHeroImagesConfigHeroImagesConfig
+  extends Struct.SingleTypeSchema {
+  collectionName: 'hero_images_configs';
+  info: {
+    description: 'Configuration for hero images across all pages';
+    displayName: 'Hero Images Config';
+    pluralName: 'hero-images-configs';
+    singularName: 'hero-images-config';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    eventsPage: Schema.Attribute.Text;
+    galleryPage: Schema.Attribute.Text;
+    historyPage: Schema.Attribute.Text;
+    homePage: Schema.Attribute.Text;
+    joinUsPage: Schema.Attribute.Text;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::hero-images-config.hero-images-config'
+    > &
+      Schema.Attribute.Private;
+    publishedAt: Schema.Attribute.DateTime;
+    servicesPage: Schema.Attribute.Text;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface ApiHistoryArticleHistoryArticle
   extends Struct.CollectionTypeSchema {
   collectionName: 'history_articles';
@@ -657,6 +692,11 @@ export interface ApiHistoryArticleHistoryArticle
         maxLength: 500;
       }>;
     heroImage: Schema.Attribute.Media<'images'>;
+    heroImageFocalPoint: Schema.Attribute.JSON &
+      Schema.Attribute.DefaultTo<{
+        x: 50;
+        y: 50;
+      }>;
     heroTitle: Schema.Attribute.String &
       Schema.Attribute.SetMinMaxLength<{
         maxLength: 255;
@@ -687,6 +727,11 @@ export interface ApiHistoryArticleHistoryArticle
     mainImageDescription: Schema.Attribute.Text &
       Schema.Attribute.SetMinMaxLength<{
         maxLength: 500;
+      }>;
+    mainImageFocalPoint: Schema.Attribute.JSON &
+      Schema.Attribute.DefaultTo<{
+        x: 50;
+        y: 50;
       }>;
     publishedAt: Schema.Attribute.DateTime;
     publishedDate: Schema.Attribute.Date & Schema.Attribute.Required;
@@ -1309,6 +1354,7 @@ declare module '@strapi/strapi' {
       'api::custom-upload.custom-upload': ApiCustomUploadCustomUpload;
       'api::event.event': ApiEventEvent;
       'api::gallery-photo.gallery-photo': ApiGalleryPhotoGalleryPhoto;
+      'api::hero-images-config.hero-images-config': ApiHeroImagesConfigHeroImagesConfig;
       'api::history-article.history-article': ApiHistoryArticleHistoryArticle;
       'api::raw-upload.raw-upload': ApiRawUploadRawUpload;
       'plugin::content-releases.release': PluginContentReleasesRelease;

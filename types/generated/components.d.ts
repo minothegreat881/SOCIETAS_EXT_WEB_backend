@@ -45,11 +45,21 @@ export interface ContentContentImage extends Struct.ComponentSchema {
       Schema.Attribute.SetMinMaxLength<{
         maxLength: 255;
       }>;
+    aspectRatio: Schema.Attribute.Enumeration<
+      ['3:2', '16:9', '4:3', '1:1', '2:3', '9:16', '3:4']
+    > &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'3:2'>;
     caption: Schema.Attribute.String &
       Schema.Attribute.SetMinMaxLength<{
         maxLength: 500;
       }>;
     image: Schema.Attribute.Media<'images'> & Schema.Attribute.Required;
+    objectPosition: Schema.Attribute.String &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 50;
+      }> &
+      Schema.Attribute.DefaultTo<'center center'>;
     pairWithNext: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
     position: Schema.Attribute.Enumeration<
       ['left', 'right', 'center', 'full']
@@ -59,6 +69,15 @@ export interface ContentContentImage extends Struct.ComponentSchema {
     rounded: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
     shadow: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
     showCaption: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
+    sortOrder: Schema.Attribute.Integer &
+      Schema.Attribute.SetMinMax<
+        {
+          max: 999;
+          min: 0;
+        },
+        number
+      > &
+      Schema.Attribute.DefaultTo<0>;
     width: Schema.Attribute.Enumeration<['30', '40', '50', '60', '100']> &
       Schema.Attribute.Required &
       Schema.Attribute.DefaultTo<'50'>;

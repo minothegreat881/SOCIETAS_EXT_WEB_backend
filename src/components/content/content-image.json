@@ -34,6 +34,17 @@
       "default": "50",
       "required": true
     },
+    "objectPosition": {
+      "type": "string",
+      "default": "center center",
+      "maxLength": 50
+    },
+    "aspectRatio": {
+      "type": "enumeration",
+      "enum": ["3:2", "16:9", "4:3", "1:1", "2:3", "9:16", "3:4"],
+      "default": "3:2",
+      "required": true
+    },
     "showCaption": {
       "type": "boolean",
       "default": true
@@ -49,6 +60,12 @@
     "pairWithNext": {
       "type": "boolean",
       "default": false
+    },
+    "sortOrder": {
+      "type": "integer",
+      "default": 0,
+      "min": 0,
+      "max": 999
     }
   }
 }

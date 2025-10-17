@@ -70,5 +70,31 @@ export default factories.createCoreController('api::history-article.history-arti
 
     // Call the default core controller's findOne method with enhanced populate
     return await super.findOne(ctx);
+  },
+
+  async update(ctx) {
+    // Log incoming request data for debugging contentImages issue
+    console.log('🔥 STRAPI UPDATE REQUEST - ID:', ctx.params.id);
+    console.log('🔥 Request body:', JSON.stringify(ctx.request.body, null, 2));
+
+    if (ctx.request.body?.data?.contentImages) {
+      console.log('🖼️ STRAPI: Received contentImages count:', ctx.request.body.data.contentImages.length);
+      ctx.request.body.data.contentImages.forEach((img: any, i: number) => {
+        console.log(`  Image ${i}: ID=${img.image}, caption="${img.caption}"`);
+      });
+    }
+
+    // Call the default update method
+    const response = await super.update(ctx);
+
+    // Log what was saved
+    if (response?.data?.contentImages) {
+      console.log('🖼️ STRAPI: Saved contentImages count:', response.data.contentImages.length);
+      response.data.contentImages.forEach((img: any, i: number) => {
+        console.log(`  Saved Image ${i}: ID=${img.image?.id || img.image}, caption="${img.caption}"`);
+      });
+    }
+
+    return response;
   }
 }));

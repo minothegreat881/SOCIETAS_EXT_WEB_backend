@@ -1,0 +1,49 @@
+{
+  "kind": "collectionType",
+  "collectionName": "attendances",
+  "info": {
+    "singularName": "attendance",
+    "pluralName": "attendances",
+    "displayName": "Attendance",
+    "description": "Potvrdenie účasti člena na aktivite alebo podujatí"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "user": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "attendances"
+    },
+    "targetType": {
+      "type": "enumeration",
+      "enum": ["activity", "event"],
+      "required": true,
+      "default": "activity"
+    },
+    "targetId": {
+      "type": "string",
+      "required": true
+    },
+    "occurrence": {
+      "type": "datetime",
+      "description": "Konkrétny termín — pri opakovanom tréningu odlišuje jednotlivé stretnutia"
+    },
+    "status": {
+      "type": "enumeration",
+      "enum": ["going", "maybe", "not_going"],
+      "required": true,
+      "default": "going"
+    },
+    "note": {
+      "type": "string",
+      "maxLength": 200
+    },
+    "remindedAt": {
+      "type": "datetime",
+      "description": "Kedy bola odoslaná pripomienka, aby sa neposielala dvakrát"
+    }
+  }
+}

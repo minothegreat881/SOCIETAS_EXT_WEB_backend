@@ -7,6 +7,8 @@ export default [
   
   'strapi::logger',
   'strapi::errors',
+  // zrozumiteľné hlášky na /api/auth/* namiesto holého 500
+  { name: 'global::auth-errors', config: {} },
   'strapi::security',
   {
     name: 'strapi::cors',
@@ -24,6 +26,7 @@ export default [
         'http://localhost:3000',
         'http://localhost:3001',
         'http://localhost:3002',
+        'http://localhost:3005',
       ],
       methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
       credentials: true,

@@ -440,6 +440,94 @@ export interface ApiActivityActivity extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiAnnouncementAnnouncement
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'announcements';
+  info: {
+    description: 'Oznam na \u010Dlenskej n\u00E1stenke';
+    displayName: 'Announcement';
+    pluralName: 'announcements';
+    singularName: 'announcement';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    authorName: Schema.Attribute.String &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 80;
+      }>;
+    body: Schema.Attribute.RichText & Schema.Attribute.Required;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    image: Schema.Attribute.Media<'images'>;
+    importance: Schema.Attribute.Enumeration<['normal', 'important']> &
+      Schema.Attribute.DefaultTo<'normal'>;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::announcement.announcement'
+    > &
+      Schema.Attribute.Private;
+    pinned: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
+    publishedAt: Schema.Attribute.DateTime;
+    title: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 200;
+      }>;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiAttendanceAttendance extends Struct.CollectionTypeSchema {
+  collectionName: 'attendances';
+  info: {
+    description: 'Potvrdenie \u00FA\u010Dasti \u010Dlena na aktivite alebo podujat\u00ED';
+    displayName: 'Attendance';
+    pluralName: 'attendances';
+    singularName: 'attendance';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::attendance.attendance'
+    > &
+      Schema.Attribute.Private;
+    note: Schema.Attribute.String &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 200;
+      }>;
+    occurrence: Schema.Attribute.DateTime;
+    publishedAt: Schema.Attribute.DateTime;
+    remindedAt: Schema.Attribute.DateTime;
+    status: Schema.Attribute.Enumeration<['going', 'maybe', 'not_going']> &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'going'>;
+    targetId: Schema.Attribute.String & Schema.Attribute.Required;
+    targetType: Schema.Attribute.Enumeration<['activity', 'event']> &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'activity'>;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    user: Schema.Attribute.Relation<
+      'manyToOne',
+      'plugin::users-permissions.user'
+    >;
+  };
+}
+
 export interface ApiCustomUploadCustomUpload extends Struct.SingleTypeSchema {
   collectionName: 'custom_uploads';
   info: {
@@ -809,6 +897,191 @@ export interface ApiHistoryArticleHistoryArticle
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+  };
+}
+
+export interface ApiNotificationNotification
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'notifications';
+  info: {
+    description: 'Upozornenie pre \u010Dlena (zvon\u010Dek v \u010Dlenskej z\u00F3ne)';
+    displayName: 'Notification';
+    pluralName: 'notifications';
+    singularName: 'notification';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    body: Schema.Attribute.Text &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 600;
+      }>;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    link: Schema.Attribute.String &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 300;
+      }>;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::notification.notification'
+    > &
+      Schema.Attribute.Private;
+    publishedAt: Schema.Attribute.DateTime;
+    read: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
+    readAt: Schema.Attribute.DateTime;
+    title: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 200;
+      }>;
+    type: Schema.Attribute.Enumeration<
+      [
+        'activity_reminder',
+        'activity_new',
+        'poll_new',
+        'poll_closing',
+        'announcement',
+        'account_approved',
+        'system',
+      ]
+    > &
+      Schema.Attribute.Required;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    user: Schema.Attribute.Relation<
+      'manyToOne',
+      'plugin::users-permissions.user'
+    >;
+  };
+}
+
+export interface ApiPollVotePollVote extends Struct.CollectionTypeSchema {
+  collectionName: 'poll_votes';
+  info: {
+    description: 'Hlas \u010Dlena v hlasovan\u00ED';
+    displayName: 'Poll vote';
+    pluralName: 'poll-votes';
+    singularName: 'poll-vote';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    choices: Schema.Attribute.JSON & Schema.Attribute.Required;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::poll-vote.poll-vote'
+    > &
+      Schema.Attribute.Private;
+    poll: Schema.Attribute.Relation<'manyToOne', 'api::poll.poll'>;
+    publishedAt: Schema.Attribute.DateTime;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    user: Schema.Attribute.Relation<
+      'manyToOne',
+      'plugin::users-permissions.user'
+    >;
+  };
+}
+
+export interface ApiPollPoll extends Struct.CollectionTypeSchema {
+  collectionName: 'polls';
+  info: {
+    description: 'Hlasovanie pre \u010Dlenov skupiny';
+    displayName: 'Poll';
+    pluralName: 'polls';
+    singularName: 'poll';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    closesAt: Schema.Attribute.DateTime;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    createdByName: Schema.Attribute.String &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 80;
+      }>;
+    description: Schema.Attribute.Text &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 1000;
+      }>;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<'oneToMany', 'api::poll.poll'> &
+      Schema.Attribute.Private;
+    multiChoice: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
+    options: Schema.Attribute.JSON & Schema.Attribute.Required;
+    publishedAt: Schema.Attribute.DateTime;
+    question: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 300;
+      }>;
+    resultsVisible: Schema.Attribute.Enumeration<
+      ['always', 'after_vote', 'after_close']
+    > &
+      Schema.Attribute.DefaultTo<'after_vote'>;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    votes: Schema.Attribute.Relation<'oneToMany', 'api::poll-vote.poll-vote'>;
+  };
+}
+
+export interface ApiPushSubscriptionPushSubscription
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'push_subscriptions';
+  info: {
+    description: 'Odber push notifik\u00E1ci\u00ED pre jedno zariadenie \u010Dlena';
+    displayName: 'Push subscription';
+    pluralName: 'push-subscriptions';
+    singularName: 'push-subscription';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    auth: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.Private;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    endpoint: Schema.Attribute.Text & Schema.Attribute.Required;
+    failCount: Schema.Attribute.Integer & Schema.Attribute.DefaultTo<0>;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::push-subscription.push-subscription'
+    > &
+      Schema.Attribute.Private;
+    p256dh: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.Private;
+    publishedAt: Schema.Attribute.DateTime;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    user: Schema.Attribute.Relation<
+      'manyToOne',
+      'plugin::users-permissions.user'
+    >;
+    userAgent: Schema.Attribute.String &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 300;
+      }>;
   };
 }
 
@@ -1299,12 +1572,28 @@ export interface PluginUsersPermissionsUser
     timestamps: true;
   };
   attributes: {
+    approved: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
+    approvedAt: Schema.Attribute.DateTime;
+    approvedBy: Schema.Attribute.String & Schema.Attribute.Private;
+    attendances: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::attendance.attendance'
+    >;
+    avatar: Schema.Attribute.Media<'images'>;
+    bio: Schema.Attribute.Text &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 600;
+      }>;
     blocked: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
     confirmationToken: Schema.Attribute.String & Schema.Attribute.Private;
     confirmed: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    displayName: Schema.Attribute.String &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 80;
+      }>;
     email: Schema.Attribute.Email &
       Schema.Attribute.Required &
       Schema.Attribute.SetMinMaxLength<{
@@ -1316,18 +1605,57 @@ export interface PluginUsersPermissionsUser
       'plugin::users-permissions.user'
     > &
       Schema.Attribute.Private;
+    memberSince: Schema.Attribute.Date;
+    notifications: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::notification.notification'
+    >;
+    notifyActivity: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
+    notifyAnnouncement: Schema.Attribute.Boolean &
+      Schema.Attribute.DefaultTo<true>;
+    notifyEmail: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
+    notifyPoll: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
+    ownEquipment: Schema.Attribute.Text &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 600;
+      }>;
     password: Schema.Attribute.Password &
       Schema.Attribute.Private &
       Schema.Attribute.SetMinMaxLength<{
         minLength: 6;
       }>;
+    phone: Schema.Attribute.String &
+      Schema.Attribute.Private &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 30;
+      }>;
+    pollVotes: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::poll-vote.poll-vote'
+    >;
     provider: Schema.Attribute.String;
     publishedAt: Schema.Attribute.DateTime;
+    pushSubscriptions: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::push-subscription.push-subscription'
+    >;
     resetPasswordToken: Schema.Attribute.String & Schema.Attribute.Private;
     role: Schema.Attribute.Relation<
       'manyToOne',
       'plugin::users-permissions.role'
     >;
+    unitPosition: Schema.Attribute.Enumeration<
+      [
+        'novacik',
+        'auxiliar',
+        'legionar',
+        'signifer',
+        'optio',
+        'centurio',
+        'civil',
+      ]
+    > &
+      Schema.Attribute.DefaultTo<'novacik'>;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -1351,11 +1679,17 @@ declare module '@strapi/strapi' {
       'admin::transfer-token-permission': AdminTransferTokenPermission;
       'admin::user': AdminUser;
       'api::activity.activity': ApiActivityActivity;
+      'api::announcement.announcement': ApiAnnouncementAnnouncement;
+      'api::attendance.attendance': ApiAttendanceAttendance;
       'api::custom-upload.custom-upload': ApiCustomUploadCustomUpload;
       'api::event.event': ApiEventEvent;
       'api::gallery-photo.gallery-photo': ApiGalleryPhotoGalleryPhoto;
       'api::hero-images-config.hero-images-config': ApiHeroImagesConfigHeroImagesConfig;
       'api::history-article.history-article': ApiHistoryArticleHistoryArticle;
+      'api::notification.notification': ApiNotificationNotification;
+      'api::poll-vote.poll-vote': ApiPollVotePollVote;
+      'api::poll.poll': ApiPollPoll;
+      'api::push-subscription.push-subscription': ApiPushSubscriptionPushSubscription;
       'api::raw-upload.raw-upload': ApiRawUploadRawUpload;
       'plugin::content-releases.release': PluginContentReleasesRelease;
       'plugin::content-releases.release-action': PluginContentReleasesReleaseAction;

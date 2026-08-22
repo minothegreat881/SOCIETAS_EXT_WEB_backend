@@ -1,3 +1,5 @@
+import { bootstrapMembers } from './bootstrap-members';
+
 // import type { Core } from '@strapi/strapi';
 
 // Auto-seeding function for initial data
@@ -202,6 +204,9 @@ export default {
   async bootstrap({ strapi }) {
     console.log('🚀 Bootstrap: Setting up API permissions and seeding data');
     
+    // Členský systém: role, oprávnenia a nastavenia registrácie
+    await bootstrapMembers({ strapi });
+
     // Auto-seed data if database is empty
     await seedInitialData({ strapi });
     

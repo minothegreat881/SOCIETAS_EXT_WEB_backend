@@ -1,0 +1,32 @@
+{
+  "kind": "collectionType",
+  "collectionName": "poll_votes",
+  "info": {
+    "singularName": "poll-vote",
+    "pluralName": "poll-votes",
+    "displayName": "Poll vote",
+    "description": "Hlas člena v hlasovaní"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "poll": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::poll.poll",
+      "inversedBy": "votes"
+    },
+    "user": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "pollVotes"
+    },
+    "choices": {
+      "type": "json",
+      "required": true,
+      "description": "Pole id zvolených možností, napr. ['a'] alebo ['a','c']"
+    }
+  }
+}

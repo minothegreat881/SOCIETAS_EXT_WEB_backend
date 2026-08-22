@@ -1,0 +1,46 @@
+{
+  "kind": "collectionType",
+  "collectionName": "notifications",
+  "info": {
+    "singularName": "notification",
+    "pluralName": "notifications",
+    "displayName": "Notification",
+    "description": "Upozornenie pre člena (zvonček v členskej zóne)"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "user": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "notifications"
+    },
+    "type": {
+      "type": "enumeration",
+      "enum": ["activity_reminder", "activity_new", "poll_new", "poll_closing", "announcement", "account_approved", "system"],
+      "required": true
+    },
+    "title": {
+      "type": "string",
+      "required": true,
+      "maxLength": 200
+    },
+    "body": {
+      "type": "text",
+      "maxLength": 600
+    },
+    "link": {
+      "type": "string",
+      "maxLength": 300
+    },
+    "read": {
+      "type": "boolean",
+      "default": false
+    },
+    "readAt": {
+      "type": "datetime"
+    }
+  }
+}

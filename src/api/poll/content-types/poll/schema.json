@@ -1,0 +1,53 @@
+{
+  "kind": "collectionType",
+  "collectionName": "polls",
+  "info": {
+    "singularName": "poll",
+    "pluralName": "polls",
+    "displayName": "Poll",
+    "description": "Hlasovanie pre členov skupiny"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "attributes": {
+    "question": {
+      "type": "string",
+      "required": true,
+      "maxLength": 300
+    },
+    "description": {
+      "type": "text",
+      "maxLength": 1000
+    },
+    "options": {
+      "type": "json",
+      "required": true,
+      "description": "Pole možností: [{ id: 'a', label: 'Text možnosti' }, …]"
+    },
+    "multiChoice": {
+      "type": "boolean",
+      "default": false,
+      "description": "Povoliť viac odpovedí naraz"
+    },
+    "closesAt": {
+      "type": "datetime",
+      "description": "Po tomto termíne sa už hlasovať nedá"
+    },
+    "resultsVisible": {
+      "type": "enumeration",
+      "enum": ["always", "after_vote", "after_close"],
+      "default": "after_vote"
+    },
+    "createdByName": {
+      "type": "string",
+      "maxLength": 80
+    },
+    "votes": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::poll-vote.poll-vote",
+      "mappedBy": "poll"
+    }
+  }
+}

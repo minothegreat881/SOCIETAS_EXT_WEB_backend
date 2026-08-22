@@ -27,5 +27,37 @@ export default ({ env }) => ({
       enableSharp: false,
       autoOrientation: false, // Zabráni auto-rotácii
     },
-  }
+  },
+  // E-mail: Gmail SMTP cez port 587 STARTTLS — port 465 hosting blokuje
+  // a spojenie visí niekoľko minút, kým padne.
+  email: {
+    config: {
+      provider: 'nodemailer',
+      // Bez SMTP údajov (lokálny vývoj) sa e-maily neodosielajú, iba vypíšu
+      // do konzoly — inak by registrácia padala na 500 pri odosielaní overenia.
+      providerOptions: env('SMTP_USER')
+        ? {
+            host: env('SMTP_HOST', 'smtp.gmail.com'),
+            port: env.int('SMTP_PORT', 587),
+            secure: env.bool('SMTP_SECURE', false),
+            auth: { user: env('SMTP_USER'), pass: env('SMTP_PASS') },
+          }
+        : { jsonTransport: true },
+      settings: {
+        defaultFrom: env('EMAIL_FROM', 'scear@scear.sk'),
+        defaultReplyTo: env('EMAIL_REPLY_TO', 'scear@scear.sk'),
+      },
+    },
+  },
+  'users-permissions': {
+    config: {
+      jwt: { expiresIn: env('JWT_EXPIRES_IN', '30d') },
+      ratelimit: { interval: 60000, max: 20 },
+      // Bez tohto zoznamu Strapi registráciu s údajmi navyše odmietne.
+      // Zámerne tu nie sú „approved" ani „role" — tie patria vedeniu.
+      register: {
+        allowedFields: ['displayName', 'phone', 'unitPosition'],
+      },
+    },
+  },
 });

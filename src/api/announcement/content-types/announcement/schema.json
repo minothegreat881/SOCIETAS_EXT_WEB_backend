@@ -1,0 +1,42 @@
+{
+  "kind": "collectionType",
+  "collectionName": "announcements",
+  "info": {
+    "singularName": "announcement",
+    "pluralName": "announcements",
+    "displayName": "Announcement",
+    "description": "Oznam na členskej nástenke"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true,
+      "maxLength": 200
+    },
+    "body": {
+      "type": "richtext",
+      "required": true
+    },
+    "pinned": {
+      "type": "boolean",
+      "default": false
+    },
+    "importance": {
+      "type": "enumeration",
+      "enum": ["normal", "important"],
+      "default": "normal"
+    },
+    "authorName": {
+      "type": "string",
+      "maxLength": 80
+    },
+    "image": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": ["images"]
+    }
+  }
+}

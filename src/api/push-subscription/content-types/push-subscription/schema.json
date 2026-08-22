@@ -1,0 +1,43 @@
+{
+  "kind": "collectionType",
+  "collectionName": "push_subscriptions",
+  "info": {
+    "singularName": "push-subscription",
+    "pluralName": "push-subscriptions",
+    "displayName": "Push subscription",
+    "description": "Odber push notifikácií pre jedno zariadenie člena"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "user": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "pushSubscriptions"
+    },
+    "endpoint": {
+      "type": "text",
+      "required": true
+    },
+    "p256dh": {
+      "type": "string",
+      "required": true,
+      "private": true
+    },
+    "auth": {
+      "type": "string",
+      "required": true,
+      "private": true
+    },
+    "userAgent": {
+      "type": "string",
+      "maxLength": 300
+    },
+    "failCount": {
+      "type": "integer",
+      "default": 0
+    }
+  }
+}

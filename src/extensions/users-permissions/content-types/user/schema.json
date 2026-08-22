@@ -1,0 +1,156 @@
+{
+  "kind": "collectionType",
+  "collectionName": "up_users",
+  "info": {
+    "name": "user",
+    "description": "",
+    "singularName": "user",
+    "pluralName": "users",
+    "displayName": "User"
+  },
+  "options": {
+    "draftAndPublish": false,
+    "timestamps": true
+  },
+  "attributes": {
+    "username": {
+      "type": "string",
+      "minLength": 3,
+      "unique": true,
+      "configurable": false,
+      "required": true
+    },
+    "email": {
+      "type": "email",
+      "minLength": 6,
+      "configurable": false,
+      "required": true
+    },
+    "provider": {
+      "type": "string",
+      "configurable": false
+    },
+    "password": {
+      "type": "password",
+      "minLength": 6,
+      "configurable": false,
+      "private": true,
+      "searchable": false
+    },
+    "resetPasswordToken": {
+      "type": "string",
+      "configurable": false,
+      "private": true,
+      "searchable": false
+    },
+    "confirmationToken": {
+      "type": "string",
+      "configurable": false,
+      "private": true,
+      "searchable": false
+    },
+    "confirmed": {
+      "type": "boolean",
+      "default": false,
+      "configurable": false
+    },
+    "blocked": {
+      "type": "boolean",
+      "default": false,
+      "configurable": false
+    },
+    "role": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.role",
+      "inversedBy": "users",
+      "configurable": false
+    },
+
+    "displayName": {
+      "type": "string",
+      "maxLength": 80
+    },
+    "avatar": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": ["images"]
+    },
+    "phone": {
+      "type": "string",
+      "maxLength": 30,
+      "private": true
+    },
+    "unitPosition": {
+      "type": "enumeration",
+      "enum": ["novacik", "auxiliar", "legionar", "signifer", "optio", "centurio", "civil"],
+      "default": "novacik"
+    },
+    "bio": {
+      "type": "text",
+      "maxLength": 600
+    },
+    "ownEquipment": {
+      "type": "text",
+      "maxLength": 600
+    },
+    "memberSince": {
+      "type": "date"
+    },
+
+    "approved": {
+      "type": "boolean",
+      "default": false
+    },
+    "approvedAt": {
+      "type": "datetime"
+    },
+    "approvedBy": {
+      "type": "string",
+      "private": true
+    },
+
+    "notifyActivity": {
+      "type": "boolean",
+      "default": true
+    },
+    "notifyPoll": {
+      "type": "boolean",
+      "default": true
+    },
+    "notifyAnnouncement": {
+      "type": "boolean",
+      "default": true
+    },
+    "notifyEmail": {
+      "type": "boolean",
+      "default": true
+    },
+
+    "attendances": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::attendance.attendance",
+      "mappedBy": "user"
+    },
+    "pollVotes": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::poll-vote.poll-vote",
+      "mappedBy": "user"
+    },
+    "notifications": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::notification.notification",
+      "mappedBy": "user"
+    },
+    "pushSubscriptions": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::push-subscription.push-subscription",
+      "mappedBy": "user"
+    }
+  }
+}

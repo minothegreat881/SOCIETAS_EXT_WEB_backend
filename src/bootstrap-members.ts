@@ -41,11 +41,20 @@ export async function bootstrapMembers({ strapi }: { strapi: any }) {
     // 1) Registrácia s overením e-mailu, prihlásenie až po potvrdení
     const frontend = process.env.FRONTEND_URL || 'https://www.scear.sk'
 
+    /**
+     * Overenie e-mailu sa dá vypnúť. Nie je to bezpečnostná diera: prístup
+     * do zóny aj tak otvára až schválenie vedením. Prepínač existuje preto,
+     * že niektorí poskytovatelia (DigitalOcean, Hetzner) blokujú odchádzajúci
+     * SMTP — a keď Strapi nevie odoslať overovací e-mail, registrácia zlyhá
+     * celá. Vtedy je lepšie overenie vypnúť než nechať nikoho zaregistrovať sa.
+     */
+    const overovatEmail = process.env.EMAIL_CONFIRMATION !== 'false'
+
     const advanced = (await pluginStore.get({ key: 'advanced' })) || {}
     const desiredAdvanced = {
       ...advanced,
       allow_register: true,
-      email_confirmation: true,
+      email_confirmation: overovatEmail,
       email_confirmation_redirection: `${frontend}/prihlasenie?potvrdene=1`,
       // odkaz v e-maile na obnovu hesla; Strapi k nemu doplní ?code=…
       email_reset_password: `${frontend}/reset-hesla`,
@@ -171,6 +180,9 @@ export async function bootstrapMembers({ strapi }: { strapi: any }) {
     await ensure(staffRole?.id, [...MEMBER_ACTIONS, ...STAFF_EXTRA_ACTIONS], 'rola vedenie')
     await ensure(publicRole?.id, PUBLIC_ACTIONS, 'rola public')
 
+    if (!overovatEmail) {
+      strapi.log.warn('[members] overenie e-mailu je VYPNUTÉ (EMAIL_CONFIRMATION=false); prístup stráži už len schválenie vedením')
+    }
     strapi.log.info('[members] členský systém pripravený')
   } catch (e) {
     strapi.log.error('[members] bootstrap zlyhal: ' + (e as Error).message)

@@ -41,6 +41,12 @@ export default ({ env }) => ({
             port: env.int('SMTP_PORT', 587),
             secure: env.bool('SMTP_SECURE', false),
             auth: { user: env('SMTP_USER'), pass: env('SMTP_PASS') },
+            // Krátke limity zámerne: keď hosting blokuje odchádzajúci SMTP,
+            // nodemailer inak čaká dve minúty a zablokuje celú požiadavku
+            // — registrácia aj cron s pripomienkami by na ňom viseli.
+            connectionTimeout: env.int('SMTP_TIMEOUT_MS', 10000),
+            greetingTimeout: env.int('SMTP_TIMEOUT_MS', 10000),
+            socketTimeout: env.int('SMTP_TIMEOUT_MS', 10000),
           }
         : { jsonTransport: true },
       settings: {

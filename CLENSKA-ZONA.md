@@ -103,3 +103,38 @@ curl -X POST $API/api/auth/local -H 'Content-Type: application/json' \
 V logu má pri štarte byť `[members] členský systém pripravený`. Riadky
 o dopĺňaní oprávnení sa objavia len pri prvom spustení — ak sa opakujú pri
 každom reštarte, niečo oprávnenia maže.
+
+## Stav nasadenia (22. 8. 2026)
+
+Beží na `api.scear.sk` (DigitalOcean, PM2 proces `strapi-backend`,
+`/var/www/scear-backend`, SQLite). Frontend je na Verceli.
+
+**Nasadenie zmeny:**
+```bash
+ssh root@134.209.232.174
+cd /var/www/scear-backend
+git pull
+NODE_OPTIONS="--max-old-space-size=1800" npm run build   # bez toho build padne na pamäť
+pm2 restart strapi-backend --update-env
+```
+
+**Prvé vedenie:** zaregistrovať sa na `www.scear.sk/registracia`, potom
+v `api.scear.sk/admin` → Content Manager → User → zmeniť rolu na *Vedenie*
+a zaškrtnúť `approved`. Bez toho nemá kto schvaľovať ostatných.
+
+### Čo zatiaľ nefunguje
+
+**Odchádzajúca pošta.** DigitalOcean blokuje SMTP na všetkých portoch
+(587, 465, 25, 2525 — overené), 443 prechádza. Preto beží
+`EMAIL_CONFIRMATION=false`: registrácia je okamžitá a prístup stráži už len
+schválenie vedením. Nechodia ani e-mailové upozornenia — notifikácie sú
+zatiaľ len v zvončeku v zóne.
+
+Dve cesty von: požiadať podporu DigitalOcean o odblokovanie SMTP, alebo
+prejsť na poskytovateľa cez HTTPS (Resend, Brevo, SendGrid). Pri druhej
+možnosti stačí vymeniť providera v `config/plugins.ts` a doplniť kľúč.
+Po sprevádzkovaní pošty zmazať `EMAIL_CONFIRMATION=false` z `.env`.
+
+**Web push.** Backend je pripravený, na Verceli však chýba premenná
+`NEXT_PUBLIC_VAPID_PUBLIC_KEY` — bez nej sa ponuka na zapnutie upozornení
+vôbec nezobrazí. Hodnota je v `.env` na serveri ako `VAPID_PUBLIC_KEY`.

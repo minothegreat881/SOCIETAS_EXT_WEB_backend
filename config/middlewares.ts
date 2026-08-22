@@ -1,10 +1,9 @@
 export default [
-  // KRITICKÉ: Force CORS middleware - MUSÍ BYŤ PRVÝ!
-  {
-    name: 'global::force-cors',
-    config: {},
-  },
-  
+  // Vlastný force-cors tu zámerne nie je: spolu so strapi::cors posielal
+  // hlavičku Access-Control-Allow-Origin dvakrát a prehliadač takú odpoveď
+  // odmietne. Doteraz to nebolo vidieť, lebo web ťahá obsah zo servera —
+  // členská zóna je prvá časť, ktorá volá API priamo z prehliadača.
+  // Origins sú nižšie v strapi::cors, pridávať ich treba tam.
   'strapi::logger',
   'strapi::errors',
   // zrozumiteľné hlášky na /api/auth/* namiesto holého 500

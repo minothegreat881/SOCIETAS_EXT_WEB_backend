@@ -38,15 +38,113 @@ function requireUser(ctx: any) {
   return user
 }
 
-/** Členská zóna je len pre schválených. Neschválený vidí iba svoj profil. */
+/**
+ * Členská zóna je len pre schválených. Neschválený vidí iba svoj profil.
+ *
+ * Vedenie prechádza aj bez príznaku `approved`: rolu prideľuje správca
+ * v admine, čo je väčšia dôvera než schválenie člena. Bez tejto výnimky
+ * by prvý veliteľ nemal kto schváliť — a sám sebe to spraviť nevie.
+ */
 function requireApproved(ctx: any) {
   const user = requireUser(ctx)
   if (!user) return null
-  if (!user.approved) {
+  if (!user.approved && ctx.state.user?.role?.type !== 'authenticated') {
     ctx.forbidden('Váš účet ešte nebol schválený správcom')
     return null
   }
   return user
+}
+
+/** Obsah smie vytvárať len vedenie. */
+function requireStaff(ctx: any) {
+  const user = requireUser(ctx)
+  if (!user) return null
+  if (ctx.state.user?.role?.type !== 'authenticated') {
+    ctx.forbidden('Na túto akciu má právo len vedenie')
+    return null
+  }
+  return user
+}
+
+/** Telo požiadavky prichádza raz zabalené v `data`, raz priamo. */
+function telo(ctx: any) {
+  return ctx.request.body?.data ?? ctx.request.body ?? {}
+}
+
+/** „22. augusta 2026, 17.30" do textu upozornenia. */
+function datumSk(hodnota: any) {
+  const d = new Date(hodnota)
+  if (Number.isNaN(d.getTime())) return ''
+  return d.toLocaleString('sk-SK', {
+    day: 'numeric', month: 'long', year: 'numeric',
+    hour: '2-digit', minute: '2-digit',
+    timeZone: 'Europe/Bratislava',
+  })
+}
+
+function skontrolujAktivitu(v: any): string | null {
+  if (!String(v.title ?? '').trim()) return 'Zadajte názov'
+  const zaciatok = new Date(v.startDate)
+  if (Number.isNaN(zaciatok.getTime())) return 'Zadajte platný dátum a čas začiatku'
+  if (v.endDate) {
+    const koniec = new Date(v.endDate)
+    if (Number.isNaN(koniec.getTime())) return 'Koniec nie je platný dátum'
+    if (koniec < zaciatok) return 'Koniec nemôže byť pred začiatkom'
+  }
+  return null
+}
+
+/**
+ * Do dvojíc `title`/`title_sk` sa píše to isté: zvyšok webu číta raz jedno,
+ * raz druhé, podľa toho, kedy ktorá časť vznikla.
+ */
+function aktivitaZVstupu(v: any) {
+  const nazov = String(v.title).trim()
+  const popis = String(v.description ?? '').trim() || null
+  const miesto = String(v.locationName ?? '').trim() || null
+  const adresa = String(v.locationAddress ?? '').trim() || null
+
+  return {
+    title: nazov,
+    title_sk: nazov,
+    description: popis,
+    description_sk: popis,
+    startDate: new Date(v.startDate),
+    endDate: v.endDate ? new Date(v.endDate) : null,
+    locationName: miesto,
+    locationName_sk: miesto,
+    locationAddress: adresa,
+    locationAddress_sk: adresa,
+    category: String(v.category ?? 'training').trim() || 'training',
+  }
+}
+
+/** Vráti pripravené dáta, alebo text chyby. */
+function pripravHlasovanie(v: any): any | string {
+  const question = String(v.question ?? '').trim()
+  if (!question) return 'Zadajte otázku'
+
+  const moznosti = (Array.isArray(v.options) ? v.options : [])
+    .map((o: any) => String(typeof o === 'string' ? o : o?.label ?? '').trim())
+    .filter(Boolean)
+  if (moznosti.length < 2) return 'Hlasovanie potrebuje aspoň dve možnosti'
+  if (new Set(moznosti).size !== moznosti.length) return 'Možnosti sa nesmú opakovať'
+
+  if (v.closesAt && Number.isNaN(new Date(v.closesAt).getTime())) {
+    return 'Termín uzávierky nie je platný dátum'
+  }
+
+  return {
+    question,
+    description: String(v.description ?? '').trim() || null,
+    // id je poradie: stabilné a hlasy sa naň viažu
+    options: moznosti.map((label, i) => ({ id: `m${i + 1}`, label })),
+    multiChoice: !!v.multiChoice,
+    closesAt: v.closesAt ? new Date(v.closesAt) : null,
+    resultsVisible: ['always', 'after_vote', 'after_close'].includes(v.resultsVisible)
+      ? v.resultsVisible
+      : 'after_vote',
+  }
 }
 
 export default {
@@ -386,5 +484,202 @@ export default {
     })
 
     ctx.body = updated
+  },
+
+  // ---- tvorba obsahu (len vedenie) ----
+
+  /** POST /api/member/admin/activities — nový tréning alebo podujatie */
+  async createActivity(ctx: any) {
+    const staff = requireStaff(ctx)
+    if (!staff) return
+
+    const vstup = telo(ctx)
+    const chyba = skontrolujAktivitu(vstup)
+    if (chyba) { ctx.badRequest(chyba); return }
+
+    const data = aktivitaZVstupu(vstup)
+    const row = await strapi.db.query('api::activity.activity').create({
+      data: { ...data, publishedAt: new Date(), locale: 'sk' },
+    })
+
+    await strapi.service('api::notification.notify').notifyAllMembers({
+      type: 'activity_new',
+      title: `Nový termín: ${data.title_sk}`,
+      body: `${datumSk(data.startDate)}${data.locationName_sk ? ' · ' + data.locationName_sk : ''}. Potvrďte účasť.`,
+      link: '/clenska-zona/aktivity',
+      dedupKey: `activity-new-${row.id}`,
+      actorId: staff.id,
+    })
+
+    ctx.body = row
+  },
+
+  /** PUT /api/member/admin/activities/:id */
+  async updateActivity(ctx: any) {
+    const staff = requireStaff(ctx)
+    if (!staff) return
+
+    const vstup = telo(ctx)
+    const chyba = skontrolujAktivitu(vstup)
+    if (chyba) { ctx.badRequest(chyba); return }
+
+    const row = await strapi.db.query('api::activity.activity').update({
+      where: { id: ctx.params.id },
+      data: aktivitaZVstupu(vstup),
+    })
+    if (!row) { ctx.notFound('Aktivita neexistuje'); return }
+    ctx.body = row
+  },
+
+  /** DELETE /api/member/admin/activities/:id — aj s potvrdeniami účasti */
+  async deleteActivity(ctx: any) {
+    const staff = requireStaff(ctx)
+    if (!staff) return
+
+    const id = String(ctx.params.id)
+    await strapi.db.query('api::attendance.attendance').deleteMany({
+      where: { targetType: 'activity', targetId: id },
+    })
+    const row = await strapi.db.query('api::activity.activity').delete({ where: { id } })
+    if (!row) { ctx.notFound('Aktivita neexistuje'); return }
+    ctx.body = { ok: true }
+  },
+
+  /** POST /api/member/admin/polls — nové hlasovanie */
+  async createPoll(ctx: any) {
+    const staff = requireStaff(ctx)
+    if (!staff) return
+
+    const vstup = telo(ctx)
+    const pripravene = pripravHlasovanie(vstup)
+    if (typeof pripravene === 'string') { ctx.badRequest(pripravene); return }
+
+    const row = await strapi.db.query('api::poll.poll').create({
+      data: {
+        ...pripravene,
+        createdByName: staff.displayName || staff.username || null,
+        publishedAt: new Date(),
+        locale: 'sk',
+      },
+    })
+
+    await strapi.service('api::notification.notify').notifyAllMembers({
+      type: 'poll_new',
+      title: 'Nové hlasovanie',
+      body: pripravene.question,
+      link: '/clenska-zona/hlasovania',
+      dedupKey: `poll-new-${row.id}`,
+      actorId: staff.id,
+    })
+
+    ctx.body = row
+  },
+
+  /** PUT /api/member/admin/polls/:id */
+  async updatePoll(ctx: any) {
+    const staff = requireStaff(ctx)
+    if (!staff) return
+
+    const pripravene = pripravHlasovanie(telo(ctx))
+    if (typeof pripravene === 'string') { ctx.badRequest(pripravene); return }
+
+    // Zmena možností po odovzdaní hlasov by hlasy osirela — preto len
+    // vtedy, keď ešte nikto nehlasoval.
+    const hlasov = await strapi.db.query('api::poll-vote.poll-vote').count({
+      where: { poll: ctx.params.id },
+    })
+    if (hlasov > 0) {
+      delete (pripravene as any).options
+      delete (pripravene as any).multiChoice
+    }
+
+    const row = await strapi.db.query('api::poll.poll').update({
+      where: { id: ctx.params.id },
+      data: pripravene,
+    })
+    if (!row) { ctx.notFound('Hlasovanie neexistuje'); return }
+    ctx.body = { ...row, zamknuteMoznosti: hlasov > 0 }
+  },
+
+  /** DELETE /api/member/admin/polls/:id — aj s hlasmi */
+  async deletePoll(ctx: any) {
+    const staff = requireStaff(ctx)
+    if (!staff) return
+
+    await strapi.db.query('api::poll-vote.poll-vote').deleteMany({ where: { poll: ctx.params.id } })
+    const row = await strapi.db.query('api::poll.poll').delete({ where: { id: ctx.params.id } })
+    if (!row) { ctx.notFound('Hlasovanie neexistuje'); return }
+    ctx.body = { ok: true }
+  },
+
+  /** POST /api/member/admin/announcements — nový oznam */
+  async createAnnouncement(ctx: any) {
+    const staff = requireStaff(ctx)
+    if (!staff) return
+
+    const vstup = telo(ctx)
+    const title = String(vstup.title ?? '').trim()
+    const body = String(vstup.body ?? '').trim()
+    if (!title) { ctx.badRequest('Oznam musí mať nadpis'); return }
+    if (!body) { ctx.badRequest('Oznam musí mať text'); return }
+
+    const row = await strapi.db.query('api::announcement.announcement').create({
+      data: {
+        title,
+        body,
+        pinned: !!vstup.pinned,
+        importance: vstup.importance === 'important' ? 'important' : 'normal',
+        authorName: staff.displayName || staff.username || null,
+        publishedAt: new Date(),
+        locale: 'sk',
+      },
+    })
+
+    await strapi.service('api::notification.notify').notifyAllMembers({
+      type: 'announcement',
+      title: 'Nový oznam na nástenke',
+      body: title,
+      link: '/clenska-zona/nastenka',
+      dedupKey: `announcement-new-${row.id}`,
+      actorId: staff.id,
+    })
+
+    ctx.body = row
+  },
+
+  /** PUT /api/member/admin/announcements/:id */
+  async updateAnnouncement(ctx: any) {
+    const staff = requireStaff(ctx)
+    if (!staff) return
+
+    const vstup = telo(ctx)
+    const title = String(vstup.title ?? '').trim()
+    const body = String(vstup.body ?? '').trim()
+    if (!title) { ctx.badRequest('Oznam musí mať nadpis'); return }
+    if (!body) { ctx.badRequest('Oznam musí mať text'); return }
+
+    const row = await strapi.db.query('api::announcement.announcement').update({
+      where: { id: ctx.params.id },
+      data: {
+        title,
+        body,
+        pinned: !!vstup.pinned,
+        importance: vstup.importance === 'important' ? 'important' : 'normal',
+      },
+    })
+    if (!row) { ctx.notFound('Oznam neexistuje'); return }
+    ctx.body = row
+  },
+
+  /** DELETE /api/member/admin/announcements/:id */
+  async deleteAnnouncement(ctx: any) {
+    const staff = requireStaff(ctx)
+    if (!staff) return
+
+    const row = await strapi.db.query('api::announcement.announcement').delete({
+      where: { id: ctx.params.id },
+    })
+    if (!row) { ctx.notFound('Oznam neexistuje'); return }
+    ctx.body = { ok: true }
   },
 }

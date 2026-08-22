@@ -32,6 +32,15 @@ const MEMBER_ACTIONS = [
 const STAFF_EXTRA_ACTIONS = [
   'api::member.member.pending',
   'api::member.member.approve',
+  'api::member.member.createActivity',
+  'api::member.member.updateActivity',
+  'api::member.member.deleteActivity',
+  'api::member.member.createPoll',
+  'api::member.member.updatePoll',
+  'api::member.member.deletePoll',
+  'api::member.member.createAnnouncement',
+  'api::member.member.updateAnnouncement',
+  'api::member.member.deleteAnnouncement',
 ]
 
 export async function bootstrapMembers({ strapi }: { strapi: any }) {
